@@ -20,7 +20,7 @@ async function bootstrap() {
     secret: 'secretKey',
     cookie: {
       path: '/',
-      domain: '*',
+      domain: 'magic-music-library.herokuapp.com',
       maxAge: 1000 * 60 * 24 // 24 hours
     }
   }));
