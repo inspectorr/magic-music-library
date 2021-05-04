@@ -1,0 +1,23 @@
+.layout {
+  display: grid;
+  height: 100vh;
+  grid-template-rows: 60px 1fr;
+  grid-template-areas: "bar" "content";
+
+  &__bar {
+    grid-area: bar;
+    background-color: black;
+    color: white;
+    display: grid;
+    align-items: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+
+  &__content {
+    grid-area: content;
+    display: grid;
+    padding: 1rem 0;
+    place-items: center;
+  }
+}

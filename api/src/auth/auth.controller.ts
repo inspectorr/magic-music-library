@@ -6,6 +6,7 @@ import {
   Get,
   Body,
   Put,
+  Res,
 } from '@nestjs/common';
 import { AuthService } from '@/auth/auth.service';
 import { JwtAuthGuard } from '@/auth/jwt/jwt-auth.guard';
@@ -34,8 +35,17 @@ export class AuthController {
   }
 
   @Post('login')
-  login(@Body() user: LoginDto) {
-    return this.authService.login(user);
+  async login(@Body() user: LoginDto, @Res() res) {
+    const token = await this.authService.login(user);
+    res.cookie('token', token, { httpOnly: true });
+    res.json({ token });
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('logout')
+  async logout(@Request() req, @Res() res) {
+    req.logout();
+    res.clearCookie('token').json({ success: true });
   }
 
   @UseGuards(JwtAuthGuard)
