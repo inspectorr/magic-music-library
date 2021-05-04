@@ -12,46 +12,52 @@ function Login({ router }) {
   const {
     waiting,
     error,
-    request: login,
+    request: signup,
     formApi: {
       handleSubmit,
       register
     }
   } = useRemote(async ({
+    name,
     email,
     password
   }) => {
     return request({
       method: 'POST',
-      url: '/login',
+      url: '/register',
       data: {
+        name,
         email,
         password
       }
     });
   }, {
-    onSuccess(data) {
-      console.log({data});
-      router.replace('/');
+    onSuccess() {
+      router.replace('/login');
     }
   });
   
   return (
     <Layout
-      className="login"
+      className="register"
       control={[
-        <Link href="/register">
+        <Link href="/login">
           <a>
-            <BarButton>Sign Up</BarButton>
+            <BarButton>Sign In</BarButton>
           </a>
         </Link>
       ]}
     >
-      <h2>Login</h2>
-      <form onSubmit={handleSubmit(login)}>
+      <h2>Register</h2>
+      <form onSubmit={handleSubmit(signup)}>
         <Input
           label="Email"
           name="email"
+          register={register}
+        />
+        <Input
+          label="Name"
+          name="name"
           register={register}
         />
         <Input
@@ -66,7 +72,7 @@ function Login({ router }) {
           className="login__button"
           waiting={waiting}
         >
-          Login
+          Register
         </Button>
       </form>
     </Layout>
