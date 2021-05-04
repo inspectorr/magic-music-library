@@ -6,7 +6,7 @@
     "dev": "next dev",
     "dev:front": "cross-env USE_REMOTE_API=true next dev",
     "build": "cross-env USE_REMOTE_API=true next build",
-    "start": "cross-env USE_REMOTE_API=true next start"
+    "start": "cross-env USE_REMOTE_API=true next start -p $PORT"
   },
   "dependencies": {
     "axios": "^0.21.1",

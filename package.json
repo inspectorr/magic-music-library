@@ -6,6 +6,7 @@
   "scripts": {
     "dev:api": "cd api && yarn dev",
     "deploy:production:api": "git subtree push --prefix api heroku master && yarn production:logs",
+    "deploy:production:client": "git subtree push --prefix client https://git.heroku.com/magic-music-library.git master && yarn production:logs",
     "production:logs": "heroku logs --tail",
     "empty": "."
   }
