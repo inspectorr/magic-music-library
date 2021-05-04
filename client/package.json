@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "dev:front": "cross-env NEXT_PUBLIC_USE_REMOTE_API=true next dev",
+    "dev:remote": "cross-env NEXT_PUBLIC_USE_REMOTE_API=true next dev",
     "build": "cross-env NEXT_PUBLIC_USE_REMOTE_API=true next build",
     "start": "cross-env NEXT_PUBLIC_USE_REMOTE_API=true next start -p $PORT"
   },

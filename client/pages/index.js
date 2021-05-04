@@ -11,7 +11,7 @@ function Home() {
     <Layout
       className="home"
       control={[
-        <div>{user.email}</div>,
+        <div>{user?.email}</div>,
         <Link href="/login?action=logout">
           <a>
             <BarButton>Logout</BarButton>
