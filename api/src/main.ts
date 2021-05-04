@@ -8,17 +8,17 @@ const session = require('express-session');
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe());
-  app.enableCors({
-    origin: function (origin: string, callback: Function) {
-      // todo (do not allow all sources)
-      return callback(null, true)
-    },
-    credentials: true,
-  });
+  // app.enableCors({
+  //   origin: function (origin: string, callback: Function) {
+  //     // todo (do not allow all sources)
+  //     return callback(null, true)
+  //   },
+  //   credentials: true,
+  // });
   app.use(cookieParser());
   app.use(function(req, res, next) {
     res.header('Access-Control-Allow-Credentials', true);
-    res.header('Access-Control-Allow-Origin', 'https://magic-music-library.herokuapp.com');
+    res.header('Access-Control-Allow-Origin', req.headers.origin);
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
     res.header('Access-Control-Allow-Headers', 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept');
     next();
