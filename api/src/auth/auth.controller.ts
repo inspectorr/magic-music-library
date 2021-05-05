@@ -37,7 +37,7 @@ export class AuthController {
   @Post('login')
   async login(@Body() user: LoginDto, @Res() res) {
     const token = await this.authService.login(user);
-    res.cookie('token', token, { httpOnly: true });
+    res.cookie('token', token, { httpOnly: true, sameSite: 'None' });
     res.json({ token });
   }
 
