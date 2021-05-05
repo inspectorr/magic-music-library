@@ -4,6 +4,7 @@ require('./support/utils/overrideEnv');
 const url = require('./support/utils/url');
 
 const apiUrl = url.api;
+console.log({apiUrl});
 
 const devProxy = {
   '/api': {
