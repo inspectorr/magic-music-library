@@ -4,7 +4,6 @@ require('./support/utils/overrideEnv');
 const url = require('./support/utils/url');
 
 const apiUrl = url.api;
-console.log({apiUrl});
 
 const devProxy = {
   '/api': {
@@ -31,7 +30,7 @@ app
     server = express()
     
     // Set up the proxy.
-    if (dev && devProxy) {
+    if (devProxy) {
       const { createProxyMiddleware } = require('http-proxy-middleware')
       Object.keys(devProxy).forEach(function (context) {
         server.use(context, createProxyMiddleware(devProxy[context]))
