@@ -37,7 +37,7 @@ export class AuthController {
   @Post('login')
   async login(@Body() user: LoginDto, @Res() res) {
     const token = await this.authService.login(user);
-    res.cookie('token', token, {
+    res.cookie('Authorization', token, {
       // httpOnly: true,
       secure: true,
       sameSite: 'None'
@@ -49,13 +49,7 @@ export class AuthController {
   @Post('logout')
   async logout(@Request() req, @Res() res) {
     req.logout();
-    res.clearCookie('token').json({ success: true });
-  }
-
-  @UseGuards(JwtAuthGuard)
-  @Get('profile')
-  getProfile(@Request() req) {
-    return this.authService.getProfile(req.user.email);
+    res.clearCookie('Authorization').json({ success: true });
   }
 
   @UseGuards(JwtAuthGuard)
@@ -63,5 +57,11 @@ export class AuthController {
   @Put('inviteAdmin')
   inviteAdmin(@Body() admin: RegisterAdminDto) {
     return this.usersService.inviteAdmin(admin);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('profile')
+  getProfile(@Request() req) {
+    return this.authService.getProfile(req.user.email);
   }
 }
