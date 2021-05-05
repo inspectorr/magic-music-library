@@ -1,9 +1,7 @@
 import axios from 'axios';
+import url from '@/support/utils/url';
 
-const baseURL =
-  process.env.NEXT_PUBLIC_USE_REMOTE_API ?
-  process.env.NEXT_PUBLIC_API_URL_REMOTE :
-  process.env.NEXT_PUBLIC_API_URL_LOCAL;
+const baseURL = `${url.web}/api`;
 
 const localAxios = axios.create({
   baseURL,
@@ -27,6 +25,7 @@ export function extractCookie(req) {
   return { headers };
 }
 
+// for useSWR
 export async function clientFetch(url, term) {
   const res = await axios({
     url,

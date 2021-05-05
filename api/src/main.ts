@@ -3,7 +3,6 @@ import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from '@/app.module';
 import * as cookieParser from 'cookie-parser';
-const session = require('express-session');
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -16,13 +15,6 @@ async function bootstrap() {
     credentials: true,
   });
   app.use(cookieParser());
-  // app.use(function(req, res, next) {
-  //   res.header('Access-Control-Allow-Credentials', true);
-  //   res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
-  //   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-  //   res.header('Access-Control-Allow-Headers', 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept');
-  //   next();
-  // });
   app.setGlobalPrefix('api');
 
   const config = new DocumentBuilder()
