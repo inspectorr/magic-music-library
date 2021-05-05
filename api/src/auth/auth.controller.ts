@@ -49,7 +49,13 @@ export class AuthController {
   @Post('logout')
   async logout(@Request() req, @Res() res) {
     req.logout();
-    res.clearCookie('token', { secure: true, sameSite: 'None' }).json({ success: true });
+    res.clearCookie('token', {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'None'
+    }).json({
+      success: true
+    });
   }
 
   @UseGuards(JwtAuthGuard)
