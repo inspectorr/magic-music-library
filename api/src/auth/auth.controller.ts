@@ -37,7 +37,7 @@ export class AuthController {
   @Post('login')
   async login(@Body() user: LoginDto, @Res() res) {
     const token = await this.authService.login(user);
-    res.cookie('Authorization', token, {
+    res.cookie('token', token, {
       // httpOnly: true,
       secure: true,
       sameSite: 'None'
@@ -49,7 +49,7 @@ export class AuthController {
   @Post('logout')
   async logout(@Request() req, @Res() res) {
     req.logout();
-    res.clearCookie('Authorization').json({ success: true });
+    res.clearCookie('token', { secure: true, sameSite: 'None' }).json({ success: true });
   }
 
   @UseGuards(JwtAuthGuard)
