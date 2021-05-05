@@ -38,7 +38,7 @@ export class AuthController {
   async login(@Body() user: LoginDto, @Res() res) {
     const token = await this.authService.login(user);
     res.cookie('token', token, {
-      // httpOnly: true,
+      httpOnly: true,
       secure: true,
       sameSite: 'None'
     });
