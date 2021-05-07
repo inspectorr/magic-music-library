@@ -59,7 +59,7 @@ function withRouting(
       const redirectUserBased = redirectOnUserFunc(user);
   
       if (redirect) {
-        clientRedirectTo = serverRedirectOrPassToClient(ctx, DEFAULT_PROTECTED_PAGE);
+        clientRedirectTo = serverRedirectOrPassToClient(ctx, typeof redirect === 'string' ? redirect : DEFAULT_PROTECTED_PAGE);
       } else if (redirectUserBased) {
         clientRedirectTo = serverRedirectOrPassToClient(ctx, redirectUserBased);
       }

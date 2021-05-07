@@ -10,8 +10,7 @@ export class RolesGuard implements CanActivate {
         private reflector: Reflector,
         private jwtService: JwtService,
         private userService: UserService,
-    ) {
-    }
+    ) {}
 
     async canActivate(context: ExecutionContext): Promise<boolean> {
         const roles = this.reflector.get<string[]>('roles', context.getHandler());
@@ -21,8 +20,13 @@ export class RolesGuard implements CanActivate {
         }
 
         const request = context.switchToHttp().getRequest();
+
+        let token = request.cookies.token;
+
         const authHeader = request.headers['authorization'];
-        const token = authHeader && authHeader.split(' ')[1];
+        if (!token && authHeader) {
+            token = authHeader && authHeader.split(' ')[1];
+        }
 
         try {
             const userDecoded = await this.jwtService.verify(token, {secret: jwtConstants.secret});

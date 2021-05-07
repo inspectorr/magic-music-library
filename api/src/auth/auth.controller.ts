@@ -5,7 +5,6 @@ import {
   UseGuards,
   Get,
   Body,
-  Put,
   Res,
 } from '@nestjs/common';
 import { AuthService } from '@/auth/auth.service';
@@ -13,8 +12,6 @@ import { JwtAuthGuard } from '@/auth/jwt/jwt-auth.guard';
 import { LoginDto } from '@/auth/dto/login.dto';
 import { RegisterUserDto } from '@/users/dto/register-user.dto';
 import { UserService } from '@/users/service/user.service';
-import { Roles } from '@/auth/roles/roles.decorator';
-import { RegisterAdminDto } from '@/users/dto/register-admin.dto';
 import {
   ApiBearerAuth,
   ApiTags,
@@ -56,13 +53,6 @@ export class AuthController {
     }).json({
       success: true
     });
-  }
-
-  @UseGuards(JwtAuthGuard)
-  @Roles('admin')
-  @Put('inviteAdmin')
-  inviteAdmin(@Body() admin: RegisterAdminDto) {
-    return this.usersService.inviteAdmin(admin);
   }
 
   @UseGuards(JwtAuthGuard)

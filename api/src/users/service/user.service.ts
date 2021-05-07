@@ -1,9 +1,9 @@
-import { HttpException, Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { CrudService } from '@/support/service/crud.service';
 import { UserEntity } from '@/users/model/user.entity';
-import { RegisterUserDto } from '../dto/register-user.dto';
-import { RegisterAdminDto } from '@/users/dto/register-admin.dto';
+import { RegisterUserDto } from '@/users/dto/register-user.dto';
+import { UpdateUserDto } from '@/users/dto/update-user.dto';
 
 @Injectable()
 export class UserService extends CrudService {
@@ -23,18 +23,11 @@ export class UserService extends CrudService {
     return await super.getOneBy('email', email);
   }
 
-  async inviteAdmin(dto: RegisterUserDto | RegisterAdminDto) {
-    const found = await this.getOneByEmail(dto.email);
-    if (found) {
-      await this.repository.update({ email: found.email }, { role: 'admin' });
-      return { email: dto.email };
+  async update(id: number, { name, role }: UpdateUserDto, byUser: UserEntity) {
+    if (id === byUser.id) { // user can't change his own role
+      role = byUser.role;
     }
 
-
-    if (!(dto as RegisterUserDto).name) { // todo better validation
-      throw new HttpException(`Can't create new admin account without details.`, 400);
-    }
-
-    return this.register(dto as RegisterUserDto, 'admin');
+    return super.updateById(id, { name, role });
   }
 }

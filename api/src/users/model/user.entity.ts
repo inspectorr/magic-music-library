@@ -8,7 +8,7 @@ export class UserEntity extends BaseEntity {
   email: string;
 
   @Column({ default: 'user' })
-  role: string;
+  role: 'admin' | 'user';
 
   @Column()
   name: string;

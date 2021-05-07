@@ -1,5 +1,6 @@
 import axios from 'axios';
 import url from '@/support/utils/url';
+import useSWR from 'swr';
 
 const baseURL = `${url.web}/api`;
 
@@ -25,7 +26,6 @@ export function extractCookie(req) {
   return { headers };
 }
 
-// for useSWR
 export async function clientFetch(url, term) {
   const res = await axios({
     url,
@@ -35,6 +35,10 @@ export async function clientFetch(url, term) {
   });
   
   return res.data;
+}
+
+export function useApi(path, options) {
+  return useSWR(path, clientFetch, options);
 }
 
 export default localAxios;
