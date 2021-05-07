@@ -9,7 +9,7 @@ function overrideEnv() {
                 process.env[key] = envConfig[key];
             }
         }
-        console.info('.env.local file used.');
+        console.info('.env.local file used successfully.');
     } catch (e) {
         console.info('No local .env.local file used.');
     }
