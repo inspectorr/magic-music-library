@@ -3,20 +3,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from '@/app.module';
 import * as cookieParser from 'cookie-parser';
-
-try {
-  const fs = require('fs');
-  const localEnvFile = fs.readFileSync(`.env.local`);
-  if (localEnvFile) {
-    const dotenv = require('dotenv');
-    const envConfig = dotenv.parse(localEnvFile);
-    for (const key in envConfig) {
-      process.env[key] = envConfig[key];
-    }
-  }
-} catch (e) {
-  console.info('No local .env.local file used.');
-}
+import overrideEnv from '@/support/utils/override.env';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -42,4 +29,5 @@ async function bootstrap() {
   await app.listen(process.env.PORT || 3001);
 }
 
+overrideEnv();
 bootstrap();

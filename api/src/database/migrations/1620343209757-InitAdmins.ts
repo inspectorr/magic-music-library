@@ -1,5 +1,8 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 import { UserEntity } from '@/users/model/user.entity';
+import overrideEnv from '@/support/utils/override.env';
+
+overrideEnv();
 
 export class InitAdmins1620343209757 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
