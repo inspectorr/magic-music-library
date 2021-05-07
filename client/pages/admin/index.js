@@ -11,7 +11,7 @@ function AdminPage() {
 export function withAdminPage(Page, options = {}) {
   return withRouting(Page, {
     isProtected: true,
-    redirectOnUserFunc: (user) => user.role !== 'admin' ? '/' : null,
+    redirectOnUserFunc: (user) => !['root', 'admin'].includes(user.role) ? '/' : null,
     ...options
   });
 }

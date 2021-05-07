@@ -10,5 +10,5 @@ export class UpdateUserDto {
     @IsNotEmpty()
     @IsString()
     @ApiProperty()
-    readonly role: 'admin' | 'user';
+    readonly role: 'root' | 'admin' | 'user';
 }

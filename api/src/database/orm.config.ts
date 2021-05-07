@@ -1,5 +1,8 @@
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
 import { UserEntity } from '@/users/model/user.entity';
+import overrideEnv from '@/support/utils/override.env';
+
+overrideEnv();
 
 function getMigrationDirectory() {
     const directory = process.env.NODE_ENV === 'migration' ? 'src' : `${__dirname}`;

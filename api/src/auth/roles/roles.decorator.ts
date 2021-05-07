@@ -4,6 +4,6 @@ import { ApiOperation } from '@nestjs/swagger';
 // @Roles('admin')
 
 export const Roles = (...roles: string[]) => applyDecorators(
-    SetMetadata('roles', roles),
+    SetMetadata('roles', ['root', ...roles]),
     ApiOperation({summary: `(${roles} only)`})
 );

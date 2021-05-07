@@ -13,7 +13,7 @@ function Home() {
       className="home"
       control={[
         <div>{user?.email}</div>,
-        user.role === 'admin' && (
+        ['admin', 'root'].includes(user.role) && (
           <Link href="/admin">
             <a>
               <BarButton>Admin panel</BarButton>
