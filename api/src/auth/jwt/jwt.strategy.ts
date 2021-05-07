@@ -3,10 +3,11 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';
 import { jwtConstants } from '@/auth/auth.constants';
 import { UserEntity } from '@/users/model/user.entity';
+import { UserService } from '@/users/service/user.service';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-  constructor() {
+  constructor(private userService: UserService) {
     super({
       jwtFromRequest: function(req) {
         return req?.cookies?.['token'];
@@ -16,7 +17,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  async validate(user: UserEntity) {
-    return user;
+  async validate(user: UserEntity): Promise<UserEntity> {
+    return this.userService.getOneByEmail(user.email);
   }
 }

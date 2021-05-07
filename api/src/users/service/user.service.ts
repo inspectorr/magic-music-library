@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { HttpException, Inject, Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { CrudService } from '@/support/service/crud.service';
 import { UserEntity } from '@/users/model/user.entity';
@@ -24,10 +24,15 @@ export class UserService extends CrudService {
   }
 
   async update(id: number, { name, role }: UpdateUserDto, byUser: UserEntity) {
-    if (id === byUser.id) { // user can't change his own role
-      role = byUser.role;
+    let payload = { name } as any;
+
+    if (
+        ['admin', 'user'].includes(role) &&
+        Number(id) !== Number(byUser.id)
+    ) {
+      payload.role = role;
     }
 
-    return super.updateById(id, { name, role });
+    return super.updateById(id, payload);
   }
 }
