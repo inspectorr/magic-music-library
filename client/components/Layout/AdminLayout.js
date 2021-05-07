@@ -36,13 +36,15 @@ function AdminLayout({ currentTab, children }) {
     >
       <div className="admin">
         <div className="admin__navigation">
-          {adminMenu.map((tab) => (
-            <AdminTab
-              key={tab.title}
-              active={currentTab === tab.name}
-              {...tab}
-            />
-          ))}
+          <div className="admin__tabs-holder">
+            {adminMenu.map((tab) => (
+              <AdminTab
+                key={tab.title}
+                active={currentTab === tab.name}
+                {...tab}
+              />
+            ))}
+          </div>
         </div>
         <div className="admin__content">
           {children}
