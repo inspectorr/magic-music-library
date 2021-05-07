@@ -19,4 +19,9 @@ export class CrudService {
   async getOneBy(column: string, value: any): Promise<any> {
     return this.repository.findOne({ [column]: value });
   }
+
+  async updateById(id: number, partial: any): Promise<any> {
+    // @ts-ignore
+    return this.repository.update({ id }, partial);
+  }
 }

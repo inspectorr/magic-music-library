@@ -6,7 +6,7 @@
 
   &__bar {
     grid-area: bar;
-    background-color: black;
+    background-color: $color-black;
     color: white;
     display: flex;
     align-items: center;
@@ -30,7 +30,8 @@
 
   &__content {
     grid-area: content;
-    padding: 1rem 0;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
     display: flex;
     flex-direction: column;
     align-items: center;
