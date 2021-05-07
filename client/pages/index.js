@@ -14,7 +14,7 @@ function Home() {
       control={[
         <div>{user?.email}</div>,
         ['admin', 'root'].includes(user.role) && (
-          <Link href="/admin">
+          <Link href="/admin/users">
             <a>
               <BarButton>Admin panel</BarButton>
             </a>
