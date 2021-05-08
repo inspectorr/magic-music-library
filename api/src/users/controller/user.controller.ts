@@ -4,28 +4,17 @@ import { JwtAuthGuard } from '@/auth/jwt/jwt-auth.guard';
 import { Roles } from '@/auth/roles/roles.decorator';
 import {
   ApiBearerAuth,
-  ApiOperation,
-  ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { UpdateUserDto } from '@/users/dto/update-user.dto';
+import { CrudController } from '@/support/controller/crud.controller';
 
-@UseGuards(JwtAuthGuard)
-@Controller('users')
 @ApiBearerAuth()
 @ApiTags('Users')
-export class UserController {
-  constructor(private readonly usersService: UserService) {}
-
-  @Get()
-  @Roles('admin')
-  getAll() {
-    return this.usersService.getAll();
-  }
-
-  @Put(':id')
-  @Roles('admin')
-  update(@Body() user: UpdateUserDto, @Param('id') id: string, @Request() req) {
-    return this.usersService.update(Number(id), user, req.user);
+@UseGuards(JwtAuthGuard)
+@Roles('admin')
+@Controller('users')
+export class UserController extends CrudController {
+  constructor(readonly service: UserService) {
+    super(service);
   }
 }
