@@ -1,27 +1,35 @@
-import { Repository } from 'typeorm';
+import { getConnection, Repository } from 'typeorm';
 import { BaseEntity } from '@/support/model/base.entity';
 import { BaseDto } from '@/support/model/base.dto';
+import { UserEntity } from '@/users/model/user.entity';
 
 export class CrudService {
   repository: Repository<BaseEntity>;
 
-  async create(baseDto: BaseDto) {
+  constructor(readonly options: any = {}) {}
+
+  qb() {
+    return getConnection().createQueryBuilder();
+  }
+
+  async create(baseDto: BaseDto, byUser: UserEntity): Promise<BaseEntity> {
     const {
       identifiers: [{ id }],
     } = await this.repository.insert(baseDto);
     return { ...baseDto, id };
   }
 
-  async getAll(...args): Promise<any[]> {
-    return this.repository.find(...args);
+  getAll(options = {}): Promise<any[]> {
+    return this.repository.find({  ...this.options, ...options });
   }
 
-  async getOneBy(column: string, value: any): Promise<any> {
-    return this.repository.findOne({ [column]: value });
+  getOneBy(column: string, value: any, options: any = {}): Promise<any> {
+    return this.repository.findOne({ [column]: value, ...this.options, ...options });
   }
 
-  async updateById(id: number, partial: any): Promise<any> {
+  async updateById(id: number, partial: any, byUser: UserEntity): Promise<any> {
     // @ts-ignore
-    return this.repository.update({ id }, partial);
+    await this.repository.update({ id }, partial);
+    return this.getOneBy('id', id, this.options);
   }
 }
