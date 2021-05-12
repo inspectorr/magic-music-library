@@ -25,7 +25,7 @@ export class SongService extends CrudService {
 
         await this.genreService.update({ genres: genres, updateForSongId: createdSong.id });
 
-        createdSong.artist = await this.artistService.getOne({ where: { id: artist } });
+        createdSong.artist = artist;
         await this.connect().manager.save(createdSong);
 
         return super.getOne({ where: { id: createdSong.id } });
