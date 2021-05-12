@@ -1,3 +1,4 @@
+import withApiData from '@/support/hocs/withApiData';
 import React from 'react';
 import AdminLayout from '@/components/Layout/AdminLayout';
 import withRouting from '@/support/hocs/withRouting';
@@ -9,11 +10,15 @@ function AdminPage() {
 }
 
 export function withAdminPage(Page, options = {}) {
-  return withRouting(Page, {
-    isProtected: true,
-    redirectOnUserFunc: (user) => !['root', 'admin'].includes(user.role) ? '/' : null,
-    ...options
-  });
+  return withApiData(
+    withRouting(Page, {
+      isProtected: true,
+      redirectOnUserFunc: (user) => !['root', 'admin'].includes(user.role) ? '/' : null,
+      ...options
+    }),[{
+      path: '/music/genres',
+      field: 'genres'
+  }]);
 }
 
 export default withAdminPage(AdminPage, {

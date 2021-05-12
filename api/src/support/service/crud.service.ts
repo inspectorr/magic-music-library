@@ -8,14 +8,18 @@ export class CrudService {
 
   constructor(readonly options: any = {}) {}
 
-  qb() {
-    return getConnection().createQueryBuilder();
+  qb(): any {
+    return this.connect().createQueryBuilder();
   }
 
-  async create(baseDto: BaseDto, byUser: UserEntity): Promise<BaseEntity> {
+  connect() {
+    return getConnection();
+  }
+
+  async create(baseDto: BaseDto, byUser: UserEntity): Promise<any> {
     const {
       identifiers: [{ id }],
-    } = await this.repository.insert(baseDto);
+    } = await this.repository.insert({ ...baseDto });
     return { ...baseDto, id };
   }
 
@@ -23,13 +27,12 @@ export class CrudService {
     return this.repository.find({  ...this.options, ...options });
   }
 
-  getOneBy(column: string, value: any, options: any = {}): Promise<any> {
-    return this.repository.findOne({ [column]: value, ...this.options, ...options });
+  getOne(options: any = {}): Promise<any> {
+    return this.repository.findOne({ ...this.options, ...options });
   }
 
   async updateById(id: number, partial: any, byUser: UserEntity): Promise<any> {
-    // @ts-ignore
-    await this.repository.update({ id }, partial);
-    return this.getOneBy('id', id, this.options);
+    await this.repository.update({ id }, { ...partial });
+    return this.getOne({ where: { id }, ...this.options });
   }
 }

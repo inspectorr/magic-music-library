@@ -1,9 +1,10 @@
 import {
-  CreateDateColumn,
+  CreateDateColumn, Entity,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
+@Entity('base')
 export class BaseEntity {
   @PrimaryGeneratedColumn()
   id?: number;
@@ -13,4 +14,8 @@ export class BaseEntity {
 
   @UpdateDateColumn()
   updatedAt?: Date;
+
+  createdByUserId?: number;
+
+  updatedByUserId?: number;
 }

@@ -1,6 +1,7 @@
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
 import { UserEntity } from '@/users/model/user.entity';
 import overrideEnv from '@/support/utils/override.env';
+import { musicEntities } from '@/music/music.providers';
 
 overrideEnv();
 
@@ -12,7 +13,8 @@ function getMigrationDirectory() {
 const ormConfig: PostgresConnectionOptions = {
     type: 'postgres',
     entities: [
-        UserEntity
+        UserEntity,
+        ...musicEntities
     ],
     cli: {
         migrationsDir: 'src/database/migrations'
