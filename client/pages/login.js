@@ -31,7 +31,6 @@ function Login({ router }) {
     });
   }, {
     onSuccess(data) {
-      console.log({data});
       router.replace('/');
     }
   });

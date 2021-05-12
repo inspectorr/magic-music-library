@@ -1,5 +1,5 @@
-import withApiData from '@/support/hocs/withApiData';
 import React from 'react';
+import withApiData from '@/support/hocs/withApiData';
 import AdminLayout from '@/components/Layout/AdminLayout';
 import withRouting from '@/support/hocs/withRouting';
 

@@ -10,7 +10,6 @@ export function useAdminControlTableApi(path) {
   const {
     request: update
   } = useRemote(({ id, ...data }) => {
-    console.log(path, 'update', {data})
     return request({
       url: `${path}/${id}`,
       method: 'PUT',
@@ -23,7 +22,6 @@ export function useAdminControlTableApi(path) {
   const {
     request: create
   } = useRemote((data) => {
-    console.log({data})
     return request({
       url: `${path}`,
       method: 'POST',
@@ -54,7 +52,6 @@ function AdminControlTable ({
   ...props
 }) {
   const tableRef = useRef();
-  console.log({data})
   return (
     <MaterialTable
       tableRef={tableRef}
