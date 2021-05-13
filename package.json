@@ -1,12 +1,17 @@
 {
   "name": "magic-music-library",
   "version": "1.0.0",
-  "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "_deploy:production:api": "git subtree push --prefix api https://git.heroku.com/magic-music-library-api.git master",
-    "_deploy:production:client": "git subtree push --prefix client https://git.heroku.com/magic-music-library.git master",
-    "deploy:production": "yarn _deploy:production:api && yarn _deploy:production:client",
-    "production:logs": "heroku logs --tail"
+    "build": "docker-compose build",
+    "push:api": "docker push inspectorr/mml-api:latest",
+    "push:client": "docker push inspectorr/mml-client:latest",
+    "jobs:build": "yarn build && yarn push:api && yarn push:client",
+    "pull:api": "docker pull inspectorr/mml-api:latest",
+    "pull:client": "docker pull inspectorr/mml-client:latest",
+    "deploy": "docker-compose up --detach",
+    "deploy-verbose": "docker-compose up",
+    "jobs:deploy": "yarn pull:api && yarn pull:client && yarn deploy",
+    "jobs:secure": "certbot --nginx -d magicmusiclibrary.ml"
   }
 }
