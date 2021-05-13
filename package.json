@@ -4,9 +4,8 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "_deploy:production:api": "git subtree push --prefix api https://git.heroku.com/magic-music-library-api.git master",
-    "_deploy:production:client": "git subtree push --prefix client https://git.heroku.com/magic-music-library.git master",
-    "deploy:production": "yarn _deploy:production:api && yarn _deploy:production:client",
-    "production:logs": "heroku logs --tail"
+    "secure": "chmod +x secure.sh && ./secure.sh",
+    "deploy": "docker-compose build && docker-compose up --detach",
+    "deploy-verbose": "yarn build-app && docker-compose build && docker-compose up"
   }
 }
