@@ -25,12 +25,12 @@ export class ArtistController extends CrudController {
     @Post()
     @ApiOperation({ summary: 'Create new artist.' })
     create(@Body() { name, birthDate, genres }: CreateArtistDto, @Request() req) {
-        return super.create({ name, birthDate, genres }, req.user);
+        return super.create({ name, birthDate, genres }, req);
     }
 
     @Put(':id')
     @ApiOperation({ summary: 'Update artist.' })
     update(@Body() { name, birthDate, genres }: UpdateArtistDto, @Param('id') id: string, @Request() req) {
-        return super.update({ name, birthDate, genres }, id, req.user);
+        return super.update({ name, birthDate, genres }, id, req);
     }
 }
