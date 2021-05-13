@@ -7,6 +7,7 @@ import { BandEntity } from '@/music/bands/band.entity';
 import { SongService } from '@/music/songs/song.service';
 import { GenreService } from '@/music/genres/genre.service';
 import { ArtistService } from '@/music/artists/artist.service';
+import { BandService } from '@/music/bands/band.service';
 
 export const musicEntities = [
     SongEntity,
@@ -19,7 +20,8 @@ export const musicEntities = [
 export const musicServices = [
     SongService,
     GenreService,
-    ArtistService
+    ArtistService,
+    BandService
 ];
 
 export const musicProviders = [
@@ -39,6 +41,12 @@ export const musicProviders = [
         provide: 'ARTIST_REPOSITORY',
         useFactory: (connection: Connection) =>
             connection.getRepository(ArtistEntity),
+        inject: ['DATABASE_CONNECTION'],
+    },
+    {
+        provide: 'BAND_REPOSITORY',
+        useFactory: (connection: Connection) =>
+            connection.getRepository(BandEntity),
         inject: ['DATABASE_CONNECTION'],
     },
 ];

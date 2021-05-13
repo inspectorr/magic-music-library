@@ -13,4 +13,7 @@ export class UpdateGenreDto extends BaseDto {
 
     @ApiProperty()
     updateForArtistId?: number;
+
+    @ApiProperty()
+    updateForBandId?: number;
 }
