@@ -7,12 +7,12 @@
     "build": "docker-compose build",
     "push:api": "docker push inspectorr/mml-api:latest",
     "push:client": "docker push inspectorr/mml-client:latest",
-    "jobs:local": "yarn build && yarn push:api && yarn push:client",
+    "jobs:build": "yarn build && yarn push:api && yarn push:client",
     "pull:api": "docker pull inspectorr/mml-api:latest",
     "pull:client": "docker pull inspectorr/mml-client:latest",
     "deploy": "docker-compose up --detach",
-    "jobs:remote": "yarn pull:api && yarn pull:client && yarn deploy",
     "deploy-verbose": "docker-compose up",
-    "secure": "chmod +x secure.sh && ./secure.sh"
+    "jobs:deploy": "yarn pull:api && yarn pull:client && yarn deploy",
+    "jobs:secure": "certbot --nginx -d api.magicmusiclibrary.ml -d app.magicmusiclibrary.ml"
   }
 }
