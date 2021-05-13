@@ -13,6 +13,6 @@
     "deploy": "docker-compose up --detach",
     "deploy-verbose": "docker-compose up",
     "jobs:deploy": "yarn pull:api && yarn pull:client && yarn deploy",
-    "jobs:secure": "certbot --nginx -d api.magicmusiclibrary.ml -d app.magicmusiclibrary.ml"
+    "jobs:secure": "certbot --nginx -d magicmusiclibrary.ml"
   }
 }
