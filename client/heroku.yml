@@ -1,4 +1,6 @@
 build:
+  config:
+    NPM_CONFIG_PRODUCTION: false
   docker:
     web: Dockerfile
 run:
