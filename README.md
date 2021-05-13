@@ -53,6 +53,7 @@ yarn jobs:build
 DATABASE_URL=<>
 ROOT_ADMIN_EMAIL=admin@mmlib.com
 ROOT_ADMIN_PASSWORD=<>
+SERVER_SECRET=<>
 ```
 - [X] Ensure docker, docker-compose, nginx, certbot, cerbot nginx plugin are installed
 - [X] Setup nginx config by ```nginx/sample.conf```
