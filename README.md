@@ -19,7 +19,7 @@ API (runs on 3001 by default):
 ```
 cd api
 ```
-Fill out .env.local from .env.local.example, then run:
+Fill out ```.env.local``` from ```.env.local.example```, then run:
 ```
 yarn install
 yarn dev
@@ -32,7 +32,7 @@ yarn dev
 - [X] Clone the repository
 - [X] Ensure docker, docker-compose are installed
 - [X] Login to docker
-- [X] For the /client, specify:
+- [X] For the ```/client```, specify:
 ```
 client/.env.local
 
@@ -48,13 +48,14 @@ yarn jobs:build
 [then, on your remote server]
 - [X] Clone the repository
 - [X] Setup empty database and get it's url with all access keys included
-- [X] Create .env file in root folder from .env.example
+- [X] Create ```.env``` file in root folder from ```.env.example```
 ```
 DATABASE_URL=<>
 ROOT_ADMIN_EMAIL=admin@mmlib.com
 ROOT_ADMIN_PASSWORD=<>
 ```
 - [X] Ensure docker, docker-compose, nginx, certbot, cerbot nginx plugin are installed
+- [X] Setup nginx config by ```nginx/sample.conf```
 - [X] Login to docker
 - [X] Run to pull and compose up images:
 ```
