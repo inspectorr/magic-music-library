@@ -1,4 +1,5 @@
 import {
+  Column,
   CreateDateColumn,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -14,7 +15,9 @@ export class BaseEntity {
   @UpdateDateColumn()
   updatedAt?: Date;
 
+  @Column({ nullable: true })
   createdByUserId?: number;
 
+  @Column({ nullable: true })
   updatedByUserId?: number;
 }

@@ -17,6 +17,7 @@ export class GenreService extends CrudService {
     }
 
     async append(property: string, genreIds: any[], add: any) {
+        genreIds = genreIds || [];
         try {
             await Promise.all(genreIds.map((id) =>
                 this.qb()
