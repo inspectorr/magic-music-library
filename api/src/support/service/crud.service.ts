@@ -8,28 +8,59 @@ export class CrudService {
 
   constructor(readonly options: any = {}) {}
 
-  qb() {
-    return getConnection().createQueryBuilder();
+  qb(): any {
+    return this.connect().createQueryBuilder();
   }
 
-  async create(baseDto: BaseDto, byUser: UserEntity): Promise<BaseEntity> {
+  connect() {
+    return getConnection();
+  }
+
+  async create(dto: BaseDto, byUser: UserEntity): Promise<any> {
     const {
       identifiers: [{ id }],
-    } = await this.repository.insert(baseDto);
-    return { ...baseDto, id };
+    } = await this.repository.insert({ ...dto });
+    let created = await this.getOne({ where: { id }, ...this.options });
+    created = await this.updateRelationsOnUpdate(created, dto);
+    return { ...dto, id };
   }
 
   getAll(options = {}): Promise<any[]> {
     return this.repository.find({  ...this.options, ...options });
   }
 
-  getOneBy(column: string, value: any, options: any = {}): Promise<any> {
-    return this.repository.findOne({ [column]: value, ...this.options, ...options });
+  getOne(options: any = {}): Promise<any> {
+    return this.repository.findOne({ ...this.options, ...options });
   }
 
   async updateById(id: number, partial: any, byUser: UserEntity): Promise<any> {
-    // @ts-ignore
-    await this.repository.update({ id }, partial);
-    return this.getOneBy('id', id, this.options);
+    await this.repository.update({ id }, { ...this.serializeDtoForBareUpdate(partial) });
+    const updated = await this.getOne({ where: { id }, ...this.options });
+    await this.updateRelationsOnUpdate(updated, { id, ...partial });
+    return this.getOne({ where: { id }, ...this.options });
   }
+
+  updateRelationsOnCreate(created, dto) {
+    return created;
+  }
+
+  updateRelationsOnUpdate(updated, dto) {
+    return updated;
+  }
+
+  serializeDtoForBareUpdate(updateDto) {
+    return updateDto;
+  }
+
+  serializeDtoForBareCreate(createDto) {
+    return createDto;
+  }
+}
+
+export interface CrudInterface {
+  updateRelationsOnCreate(created: any, dto: any): Promise<any>;
+  updateRelationsOnUpdate(updated: any, dto: any): Promise<any>;
+  updateRelations(updated: any, dto: any): Promise<any>;
+  serializeDtoForBareCreate;
+  serializeDtoForBareUpdate;
 }

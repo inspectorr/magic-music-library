@@ -10,9 +10,17 @@ const adminMenu = [{
   title: 'Users',
   path: '/users'
 }, {
+  name: 'genres',
+  title: 'Genres',
+  path: '/genres',
+}, {
+  name: 'songs',
+  title: 'Songs',
+  path: '/songs',
+}, {
   name: 'artists',
   title: 'Artists',
-  path: '/artists',
+  path: '/artists'
 }];
 
 function AdminLayout({ currentTab, children }) {

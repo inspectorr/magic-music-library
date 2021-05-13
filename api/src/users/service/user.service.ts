@@ -20,7 +20,7 @@ export class UserService extends CrudService {
   }
 
   async getOneByEmail(email: string): Promise<UserEntity> {
-    return await super.getOneBy('email', email);
+    return await super.getOne({ where: { email } });
   }
 
   async updateById(id: number, { name, role }: UpdateUserDto, byUser: UserEntity) {

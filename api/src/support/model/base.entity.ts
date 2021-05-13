@@ -13,4 +13,8 @@ export class BaseEntity {
 
   @UpdateDateColumn()
   updatedAt?: Date;
+
+  createdByUserId?: number;
+
+  updatedByUserId?: number;
 }
