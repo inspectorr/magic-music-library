@@ -4,8 +4,15 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "secure": "chmod +x secure.sh && ./secure.sh",
-    "deploy": "docker-compose build && docker-compose up --detach",
-    "deploy-verbose": "yarn build-app && docker-compose build && docker-compose up"
+    "build": "docker-compose build",
+    "push:api": "docker tag mml-api:latest inspectorr/mml-api:latest && docker push inspectorr/mml-api:latest",
+    "push:client": "docker tag mml-client:latest inspectorr/mml-client:latest && docker push inspectorr/mml-client:latest",
+    "localjobs": "yarn build && yarn push:api && yarn push:client",
+    "pull:api": "docker pull inspectorr/mml-api:latest",
+    "pull:client": "docker pull inspectorr/mml-client:latest",
+    "deploy": "docker-compose up --detach",
+    "remotejobs": "yarn pull:api && yarn pull:client && yarn deploy",
+    "deploy-verbose": "docker-compose up",
+    "secure": "chmod +x secure.sh && ./secure.sh"
   }
 }
