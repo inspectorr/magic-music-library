@@ -7,11 +7,11 @@
     "build": "docker-compose build",
     "push:api": "docker push inspectorr/mml-api:latest",
     "push:client": "docker push inspectorr/mml-client:latest",
-    "localjobs": "yarn build && yarn push:api && yarn push:client",
+    "jobs:local": "yarn build && yarn push:api && yarn push:client",
     "pull:api": "docker pull inspectorr/mml-api:latest",
     "pull:client": "docker pull inspectorr/mml-client:latest",
     "deploy": "docker-compose up --detach",
-    "remotejobs": "yarn pull:api && yarn pull:client && yarn deploy",
+    "jobs:remote": "yarn pull:api && yarn pull:client && yarn deploy",
     "deploy-verbose": "docker-compose up",
     "secure": "chmod +x secure.sh && ./secure.sh"
   }
