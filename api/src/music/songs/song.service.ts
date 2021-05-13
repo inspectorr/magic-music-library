@@ -1,44 +1,32 @@
-import { CrudService } from '@/support/service/crud.service';
+import { CrudInterface, CrudService } from '@/support/service/crud.service';
 import { Inject, Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { SongEntity } from '@/music/songs/song.entity';
-import { CreateSongDto } from '@/music/songs/dto/create-song.dto';
-import { UserEntity } from '@/users/model/user.entity';
 import { GenreService } from '@/music/genres/genre.service';
-import { UpdateSongDto } from '@/music/songs/dto/update-song.dto';
 import { ArtistService } from '@/music/artists/artist.service';
 
 @Injectable()
-export class SongService extends CrudService {
+export class SongService extends CrudService implements CrudInterface {
     @Inject('SONG_REPOSITORY') repository: Repository<SongEntity>;
+    options = { relations: ['genres', 'artist'] };
 
     constructor(
         readonly genreService: GenreService,
         readonly artistService: ArtistService,
     ) {
-        super({ relations: ['genres', 'artist'] });
+        super();
     }
 
-    async create(dto: CreateSongDto, byUser: UserEntity): Promise<SongEntity> {
-        const { genres, artist, ...song } = dto;
-        const createdSong = await super.create(song, byUser);
+    serializeDtoForBareUpdate = ({ artist, genres, ...dto }) => dto;
+    serializeDtoForBareCreate = ({ artist, genres, ...dto }) => dto;
 
-        await this.genreService.update({ genres: genres, updateForSongId: createdSong.id });
+    async updateRelations(song, dto) {
+        song.artist = dto.artist;
+        await this.connect().manager.save(song);
 
-        createdSong.artist = artist;
-        await this.connect().manager.save(createdSong);
-
-        return super.getOne({ where: { id: createdSong.id } });
+        await this.genreService.update({ genres: dto.genres, updateForSongId: song.id });
     }
 
-    async updateById(id: number, dto: UpdateSongDto, byUser: UserEntity): Promise<SongEntity> {
-        const { genres, artist, ...song } = dto;
-        let updatedSong = await super.updateById(id, song, byUser);
-
-        await this.genreService.update({ genres: genres, updateForSongId: id});
-
-        updatedSong.artist = artist;
-        await this.connect().manager.save(updatedSong);
-        return super.getOne({ where: { id } });
-    }
+    updateRelationsOnUpdate = this.updateRelations;
+    updateRelationsOnCreate = this.updateRelations;
 }

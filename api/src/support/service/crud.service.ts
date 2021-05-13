@@ -16,11 +16,13 @@ export class CrudService {
     return getConnection();
   }
 
-  async create(baseDto: BaseDto, byUser: UserEntity): Promise<any> {
+  async create(dto: BaseDto, byUser: UserEntity): Promise<any> {
     const {
       identifiers: [{ id }],
-    } = await this.repository.insert({ ...baseDto });
-    return { ...baseDto, id };
+    } = await this.repository.insert({ ...dto });
+    let created = await this.getOne({ where: { id }, ...this.options });
+    created = await this.updateRelationsOnUpdate(created, dto);
+    return { ...dto, id };
   }
 
   getAll(options = {}): Promise<any[]> {
@@ -32,7 +34,33 @@ export class CrudService {
   }
 
   async updateById(id: number, partial: any, byUser: UserEntity): Promise<any> {
-    await this.repository.update({ id }, { ...partial });
+    await this.repository.update({ id }, { ...this.serializeDtoForBareUpdate(partial) });
+    const updated = await this.getOne({ where: { id }, ...this.options });
+    await this.updateRelationsOnUpdate(updated, { id, ...partial });
     return this.getOne({ where: { id }, ...this.options });
   }
+
+  updateRelationsOnCreate(created, dto) {
+    return created;
+  }
+
+  updateRelationsOnUpdate(updated, dto) {
+    return updated;
+  }
+
+  serializeDtoForBareUpdate(updateDto) {
+    return updateDto;
+  }
+
+  serializeDtoForBareCreate(createDto) {
+    return createDto;
+  }
+}
+
+export interface CrudInterface {
+  updateRelationsOnCreate(created: any, dto: any): Promise<any>;
+  updateRelationsOnUpdate(updated: any, dto: any): Promise<any>;
+  updateRelations(updated: any, dto: any): Promise<any>;
+  serializeDtoForBareCreate;
+  serializeDtoForBareUpdate;
 }
