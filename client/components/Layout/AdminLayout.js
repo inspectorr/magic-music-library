@@ -21,6 +21,10 @@ const adminMenu = [{
   name: 'artists',
   title: 'Artists',
   path: '/artists'
+}, {
+  name: 'bands',
+  title: 'Bands',
+  path: '/bands'
 }];
 
 function AdminLayout({ currentTab, children }) {

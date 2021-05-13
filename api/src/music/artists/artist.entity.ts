@@ -21,7 +21,4 @@ export class ArtistEntity extends BaseEntity {
 
     @OneToMany(() => AlbumEntity, album => album.artist)
     albums: AlbumEntity[];
-
-    @ManyToMany(() => BandEntity)
-    bands: BandEntity[];
 }

@@ -20,4 +20,7 @@ export class UpdateSongDto extends BaseDto {
 
     @ApiProperty()
     artist?: number;
+
+    @ApiProperty()
+    band?: number;
 }
