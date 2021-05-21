@@ -19,8 +19,8 @@ export class CrudService {
   async create(dto: BaseDto, byUser: UserEntity): Promise<any> {
     const {
       identifiers: [{ id }],
-    } = await this.repository.insert({ ...dto, createdByUserId: byUser.id });
-    let created = await this.getOne({ where: { id }, ...this.options });
+    } = await this.repository.insert({ ...dto, ...(byUser ? { createdByUserId: byUser.id } : {}) });
+    const created = await this.getOne({ where: { id }, ...this.options });
     await this.updateRelationsOnUpdate(created, dto);
     return this.getOne({ where: { id }, ...this.options });
   }
@@ -35,7 +35,8 @@ export class CrudService {
 
   async updateById(id: number, partial: any, byUser: UserEntity): Promise<any> {
     await this.repository.update({ id }, {
-      ...this.serializeDtoForBareUpdate(partial), updatedByUserId: byUser.id
+      ...this.serializeDtoForBareUpdate(partial),
+      ...(byUser ? { updatedByUserId: byUser.id } : {})
     });
     const updated = await this.getOne({ where: { id }, ...this.options });
     await this.updateRelationsOnUpdate(updated, { id, ...partial });
