@@ -11,7 +11,6 @@ function ArtistsPage({ genres }) {
       <AdminControlTable
         {...adminControlTableApi}
         title="Artists"
-        path="/music/artists"
         columns={[{
           title: 'ID',
           field: 'id',

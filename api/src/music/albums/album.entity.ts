@@ -10,7 +10,7 @@ export class AlbumEntity extends BaseEntity {
     @Column()
     name: string;
 
-    @ManyToMany(() => GenreEntity)
+    @ManyToMany(() => GenreEntity, genre => genre.albums)
     genres: GenreEntity[];
 
     @Column()

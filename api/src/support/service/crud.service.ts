@@ -25,12 +25,13 @@ export class CrudService {
     return this.getOne({ where: { id }, ...this.options });
   }
 
-  getAll(options = {}): Promise<any[]> {
-    return this.repository.find({  ...this.options, ...options });
+  async getAll(options = {}): Promise<any[]> {
+    return (await this.repository.find({  ...this.options, ...options }))
+        .map((e) => this.mapEntity(e));
   }
 
   getOne(options: any = {}): Promise<any> {
-    return this.repository.findOne({ ...this.options, ...options });
+    return this.mapEntity(this.repository.findOne({ ...this.options, ...options }));
   }
 
   async updateById(id: number, partial: any, byUser: UserEntity): Promise<any> {
@@ -56,6 +57,10 @@ export class CrudService {
 
   serializeDtoForBareCreate(createDto) {
     return createDto;
+  }
+
+  mapEntity(entity) {
+    return entity;
   }
 }
 

@@ -103,3 +103,15 @@
     }
   }
 }
+
+.admin-albums {
+  &__detail-panel {
+    display: flex;
+  }
+
+  &__songs-subtable {
+    padding: 1rem;
+    flex: 1;
+    zoom: 0.8;
+  }
+}

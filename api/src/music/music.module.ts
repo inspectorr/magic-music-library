@@ -5,6 +5,7 @@ import { SongController } from '@/music/songs/song.controller';
 import { GenreController } from '@/music/genres/genre.controller';
 import { ArtistController } from '@/music/artists/artist.controller';
 import { BandController } from '@/music/bands/band.controller';
+import { AlbumController } from '@/music/albums/album.controller';
 
 @Module({
   imports: [DatabaseModule],
@@ -12,7 +13,8 @@ import { BandController } from '@/music/bands/band.controller';
     GenreController,
     SongController,
     ArtistController,
-    BandController
+    BandController,
+    AlbumController
   ],
   providers: [...musicProviders, ...musicServices],
   exports: [...musicServices],

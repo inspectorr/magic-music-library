@@ -6,6 +6,7 @@ import { UpdateGenreDto } from '@/music/genres/dto/update-genre.dto';
 import { SongEntity } from '@/music/songs/song.entity';
 import { ArtistEntity } from '@/music/artists/artist.entity';
 import { BandEntity } from '@/music/bands/band.entity';
+import { AlbumEntity } from '@/music/albums/album.entity';
 
 @Injectable()
 export class GenreService extends CrudService {
@@ -13,6 +14,7 @@ export class GenreService extends CrudService {
     @Inject('SONG_REPOSITORY') readonly songRepository: Repository<SongEntity>;
     @Inject('ARTIST_REPOSITORY') readonly artistRepository: Repository<ArtistEntity>;
     @Inject('BAND_REPOSITORY') readonly bandRepository: Repository<BandEntity>;
+    @Inject('ALBUM_REPOSITORY') readonly albumRepository: Repository<AlbumEntity>;
 
     getOneByName(name) {
         return this.repository.findOne({ where: { name } });
@@ -42,7 +44,8 @@ export class GenreService extends CrudService {
         genres = [],
         updateForSongId,
         updateForArtistId,
-        updateForBandId
+        updateForBandId,
+        updateForAlbumId
     }: UpdateGenreDto) {
         if (updateForSongId) {
             await this.updateForEntityId(this.songRepository, updateForSongId, 'songs', genres);
@@ -52,6 +55,9 @@ export class GenreService extends CrudService {
         }
         if (updateForBandId) {
             await this.updateForEntityId(this.bandRepository, updateForBandId, 'bands', genres);
+        }
+        if (updateForAlbumId) {
+            await this.updateForEntityId(this.albumRepository, updateForAlbumId, 'albums', genres);
         }
     }
 }

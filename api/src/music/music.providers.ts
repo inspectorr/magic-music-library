@@ -1,5 +1,5 @@
-import { SongEntity } from '@/music/songs/song.entity';
 import { Connection } from 'typeorm';
+import { SongEntity } from '@/music/songs/song.entity';
 import { GenreEntity } from '@/music/genres/genre.entity';
 import { ArtistEntity } from '@/music/artists/artist.entity';
 import { AlbumEntity } from '@/music/albums/album.entity';
@@ -8,20 +8,22 @@ import { SongService } from '@/music/songs/song.service';
 import { GenreService } from '@/music/genres/genre.service';
 import { ArtistService } from '@/music/artists/artist.service';
 import { BandService } from '@/music/bands/band.service';
+import { AlbumService } from '@/music/albums/album.service';
 
 export const musicEntities = [
     SongEntity,
     GenreEntity,
     ArtistEntity,
-    AlbumEntity,
     BandEntity,
+    AlbumEntity,
 ];
 
 export const musicServices = [
     SongService,
     GenreService,
     ArtistService,
-    BandService
+    BandService,
+    AlbumService
 ];
 
 export const musicProviders = [
@@ -47,6 +49,12 @@ export const musicProviders = [
         provide: 'BAND_REPOSITORY',
         useFactory: (connection: Connection) =>
             connection.getRepository(BandEntity),
+        inject: ['DATABASE_CONNECTION'],
+    },
+    {
+        provide: 'ALBUM_REPOSITORY',
+        useFactory: (connection: Connection) =>
+            connection.getRepository(AlbumEntity),
         inject: ['DATABASE_CONNECTION'],
     },
 ];

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useApi } from '@/support/utils/request';
 
-function withApiData(Component, datum = []) {
+function withApiData(Component, datum = [{ path: '', field: '' }]) {
   function ComposeComponent(Component, datum = [], generalProps = {}) {
     const Composed = datum.reduce((Component, { path, field }) => {
       return (props) => {

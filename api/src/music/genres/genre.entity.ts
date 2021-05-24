@@ -27,7 +27,7 @@ export class GenreEntity extends BaseEntity {
     @JoinTable()
     bands: BandEntity[];
 
-    @ManyToMany(() => AlbumEntity)
+    @ManyToMany(() => AlbumEntity, album => album.genres)
     @JoinTable()
     albums: AlbumEntity[];
 }

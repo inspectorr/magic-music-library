@@ -12,7 +12,6 @@ function SongsPage({ genres, artists, bands }) {
       <AdminControlTable
         {...adminControlTableApi}
         title="Songs"
-        path="/music/songs"
         columns={[{
           title: 'ID',
           field: 'id',
