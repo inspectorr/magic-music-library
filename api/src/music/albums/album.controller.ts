@@ -5,11 +5,13 @@ import { JwtAuthGuard } from '@/auth/jwt/jwt-auth.guard';
 import { AlbumService } from '@/music/albums/album.service';
 import { CreateAlbumDto } from '@/music/albums/dto/create-album.dto';
 import { UpdateAlbumDto } from '@/music/albums/dto/update-album.dto';
+import { Roles } from '@/auth/roles/roles.decorator';
 
 @ApiBearerAuth()
 @ApiTags('Albums')
 @Controller('music/albums')
 @UseGuards(JwtAuthGuard)
+@Roles('admin')
 export class AlbumController extends CrudController {
     constructor(readonly service: AlbumService) {
         super(service);
