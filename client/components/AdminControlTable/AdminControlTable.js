@@ -35,7 +35,8 @@ export function useAdminControlTableApi(path) {
     data,
     reload,
     update,
-    create
+    create,
+    path
   };
 }
 
@@ -117,9 +118,12 @@ function SelectEditComponent({
         }) : { value: value?.id, label: value?.name }}
         isMulti={isMulti}
         name="colors"
-        options={remoteData.map(({ id, name }) => {
-          return { value: id, label: name };
-        })}
+        options={[
+          ...(isMulti ? [] : [{ value: null, label: '🚫' }]),
+          ...remoteData.map(({ id, name }) => {
+            return { value: id, label: name };
+          }),
+        ]}
         classNamePrefix={isMulti ? 'multiselect' : 'select'}
         onChange={(selected, ...args) => {
           onChange(

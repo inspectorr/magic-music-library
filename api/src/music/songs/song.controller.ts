@@ -1,4 +1,15 @@
-import { Body, Controller, Param, Post, Put, Request, UseGuards } from '@nestjs/common';
+import {
+    Body,
+    ClassSerializerInterceptor,
+    Controller,
+    Get,
+    Param,
+    Post,
+    Put,
+    Request,
+    UseGuards,
+    UseInterceptors,
+} from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CrudController } from '@/support/controller/crud.controller';
 import { SongService } from '@/music/songs/song.service';
@@ -17,13 +28,20 @@ export class SongController extends CrudController {
 
     @Post()
     @ApiOperation({ summary: 'Create new song.' })
-    create(@Body() { name, releasedAt, genres, artist, band }: CreateSongDto, @Request() req) {
-        return super.create({ name, releasedAt, genres, artist, band }, req);
+    create(@Body() { name, releasedAt, genres, artist, band, album }: CreateSongDto, @Request() req) {
+        return super.create({ name, releasedAt, genres, artist, band, album }, req);
     }
 
     @Put(':id')
     @ApiOperation({ summary: 'Update song.' })
-    update(@Body() { name, releasedAt, genres, artist, band }: UpdateSongDto, @Param('id') id: string, @Request() req) {
-        return super.update({ name, releasedAt, genres, artist, band }, id, req);
+    update(@Body() { name, releasedAt, genres, artist, band, album }: UpdateSongDto, @Param('id') id: string, @Request() req) {
+        return super.update({ name, releasedAt, genres, artist, band, album }, id, req);
+    }
+
+    @UseInterceptors(ClassSerializerInterceptor)
+    @Get()
+    @ApiOperation({ summary: 'Get all songs.' })
+    getAll() {
+        return super.getAll();
     }
 }

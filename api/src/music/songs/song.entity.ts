@@ -1,4 +1,5 @@
 import { Column, Entity, Generated, ManyToMany, ManyToOne } from 'typeorm';
+import { Expose } from 'class-transformer';
 import { GenreEntity } from '@/music/genres/genre.entity';
 import { ArtistEntity } from '@/music/artists/artist.entity';
 import { BandEntity } from '@/music/bands/band.entity';
@@ -28,4 +29,14 @@ export class SongEntity extends BaseEntity {
     @Column({ nullable: true })
     @Generated('increment')
     albumOrder: number;
+
+    constructor(partial: Partial<SongEntity>) {
+        super();
+        Object.assign(this, partial);
+    }
+
+    @Expose()
+    get artistOrBand() {
+        return this.artist || this.band;
+    }
 }

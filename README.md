@@ -38,8 +38,6 @@ client/.env.local
 
 NEXT_PUBLIC_API_URL_PROD=https://magicmusiclibrary.ml/api
 NEXT_PUBLIC_WEB_URL_PROD=https://magicmusiclibrary.ml
-NEXT_PUBLIC_API_URL_DEV=http://localhost:3001/api
-NEXT_PUBLIC_WEB_URL_DEV=http://localhost:3000
 ```
 - [X] Run to build and pull images:
 ```

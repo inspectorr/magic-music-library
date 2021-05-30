@@ -2,7 +2,7 @@ import { BaseDto } from '@/support/model/base.dto';
 import { IsNotEmpty, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
-export class CreateSongDto extends BaseDto {
+export class CreateAlbumDto extends BaseDto {
     @IsString()
     @IsNotEmpty()
     @ApiProperty()
@@ -12,9 +12,6 @@ export class CreateSongDto extends BaseDto {
     releasedAt: Date;
 
     @ApiProperty()
-    albumOrder?: number;
-
-    @ApiProperty()
     genres?: number[];
 
     @ApiProperty()
@@ -22,7 +19,4 @@ export class CreateSongDto extends BaseDto {
 
     @ApiProperty()
     band?: number;
-
-    @ApiProperty()
-    album?: number;
 }
