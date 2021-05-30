@@ -65,7 +65,6 @@ export class AlbumService extends CrudService {
 
     async getSongs(albumId: number) {
         const songs = await this.songRepository.find({ where: { album: albumId }, relations: ['album'] })
-        console.log({songs});
         songs.sort((a, b) => a.albumOrder - b.albumOrder);
         return songs;
     }

@@ -30,7 +30,6 @@ export class AlbumController extends CrudController {
     @Put(':albumId/songs/reorder')
     @ApiOperation({ summary: 'Reorder songs in album.' })
     reorderSongs(@Body() body, @Param('albumId') albumId) {
-        console.log({body, albumId})
         return this.service.reorderSongs(albumId, body.songIds);
     }
 
