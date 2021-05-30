@@ -1,4 +1,7 @@
 import React from 'react';
+import AddBox from '@material-ui/icons/AddBox';
+import request, { useApi } from '@/support/utils/request';
+import useRemote from '@/support/hooks/useRemote';
 import { withAdminPage } from '@/pages/admin/index';
 import withApiData from '@/support/hocs/withApiData';
 import AdminLayout from '@/components/Layout/AdminLayout';
@@ -10,13 +13,12 @@ function AlbumsPage({
   artists,
   bands,
 }) {
-  const adminControlTableApi = useAdminControlTableApi('music/albums');
-  // const songsSubControlTableApi = useAdminControlTableApi('music/songs');
+  const albumsAdminControlTableApi = useAdminControlTableApi('music/albums');
   
   return (
     <AdminLayout currentTab="albums">
       <AdminControlTable
-        {...adminControlTableApi}
+        {...albumsAdminControlTableApi}
         title="Albums"
         columns={[{
           title: 'ID',
@@ -55,25 +57,101 @@ function AlbumsPage({
             mappingField: 'name'
           }
         }]}
-        detailPanel={() => {
+        detailPanel={(album) => {
           return (
-            <div className="admin-albums__detail-panel">
-              {/*<AlbumPlaylist items={artists.map(({ name, id }) => ({ id: `item-${id}`, content: name }))}/>*/}
-              {/*<div className="admin-albums__songs-subtable">*/}
-              {/*  <AdminControlTable*/}
-              {/*    {...songsSubControlTableApi}*/}
-              {/*    title="Add songs..."*/}
-              {/*    columns={[{*/}
-              {/*      title: 'Name',*/}
-              {/*      field: 'name'*/}
-              {/*    }]}*/}
-              {/*  />*/}
-              {/*</div>*/}
-            </div>
+            <AlbumDetailPanel album={album} />
           );
         }}
       />
     </AdminLayout>
+  );
+}
+
+function AlbumDetailPanel({ album }) {
+  const songsSubControlTableApi = useAdminControlTableApi('music/songs');
+  
+  const {
+    data: albumSongs = [],
+    mutate: reloadAlbumSongs = () => {}
+  } = useApi(`/music/albums/${album.id}/songs`);
+  
+  const {
+    request: toggleSongAlbum
+  } = useRemote(({ songId, albumId }) => {
+    return request({
+      url: `/music/albums/${albumId}/songs/${songId}`,
+      method: 'put',
+    });
+  }, {
+    onSuccess() {
+      reloadAlbumSongs();
+      songsSubControlTableApi.reload();
+    }
+  });
+  
+  const {
+    request: reorderSongs
+  } = useRemote(({ albumId, songIds }) => {
+    return request({
+      url: `/music/albums/${albumId}/songs/reorder`,
+      method: 'put',
+      data: {
+        songIds
+      }
+    })
+  }, {
+    onSuccess() {
+      reloadAlbumSongs();
+      songsSubControlTableApi.reload();
+    }
+  });
+  
+  function onSongAddClick(songId, albumId) {
+    return toggleSongAlbum({ songId, albumId });
+  }
+  
+  function onSongRemoveClick(songId, albumId) {
+    return toggleSongAlbum({ songId, albumId });
+  }
+  
+  function onReorder(albumId, songIds) {
+    return reorderSongs({ albumId, songIds });
+  }
+  
+  return (
+    <div className="admin-albums__detail-panel">
+      <AlbumPlaylist
+        key={albumSongs.map(a => a.id).join(',')}
+        items={albumSongs}
+        map={({ name, id }) => ({ id: `item-${id}`, content: name })}
+        onReorder={(ids) => onReorder(album.id, ids)}
+        onRemoveClick={onSongRemoveClick}
+      />
+      <div className="admin-albums__songs-subtable">
+        <AdminControlTable
+          {...songsSubControlTableApi}
+          data={songsSubControlTableApi.data?.filter(s => !s.album) ?? []}
+          title="Add songs..."
+          columns={[{
+            title: 'Name',
+            field: 'name'
+          }, {
+            title: 'Artist/Band',
+            field: 'artistOrBand',
+            render: item => item.artistOrBand?.name,
+            editable: false
+          }]}
+          actions={[{
+            icon: (props) => {
+              return <AddBox/>
+            },
+            onClick: (_, song) => {
+              return onSongAddClick(song.id, album.id);
+            }
+          }]}
+        />
+      </div>
+    </div>
   );
 }
 
@@ -84,8 +162,5 @@ export default withAdminPage(
   }, {
     path: 'music/bands',
     field: 'bands',
-  // }, {
-  //   path: 'music/songs',
-  //   field: 'songs',
   }])
 );

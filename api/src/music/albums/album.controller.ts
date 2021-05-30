@@ -1,4 +1,4 @@
-import { Body, Controller, Param, Post, Put, Request, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put, Request, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CrudController } from '@/support/controller/crud.controller';
 import { JwtAuthGuard } from '@/auth/jwt/jwt-auth.guard';
@@ -25,5 +25,24 @@ export class AlbumController extends CrudController {
     @ApiOperation({ summary: 'Update album.' })
     update(@Body() { name, releasedAt, genres, artist, band }: UpdateAlbumDto, @Param('id') id: string, @Request() req) {
         return super.update({ name, releasedAt, genres, artist, band }, id, req);
+    }
+
+    @Put(':albumId/songs/reorder')
+    @ApiOperation({ summary: 'Reorder songs in album.' })
+    reorderSongs(@Body() body, @Param('albumId') albumId) {
+        console.log({body, albumId})
+        return this.service.reorderSongs(albumId, body.songIds);
+    }
+
+    @Put(':albumId/songs/:songId')
+    @ApiOperation({ summary: 'Add song to album.' })
+    addSong(@Param('albumId') albumId, @Param('songId') songId) {
+        return this.service.addSong(albumId, songId);
+    }
+
+    @Get(':albumId/songs')
+    @ApiOperation({ summary: 'Get all album\'s songs.' })
+    getSongs(@Param('albumId') albumId) {
+        return this.service.getSongs(albumId);
     }
 }

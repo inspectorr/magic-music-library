@@ -4,9 +4,9 @@ import AdminControlTable, { useAdminControlTableApi } from '@/components/AdminCo
 import AdminLayout from '@/components/Layout/AdminLayout';
 import { withAdminPage } from '@/pages/admin/index';
 
-
-function SongsPage({ genres, artists, bands }) {
+function SongsPage({ genres, artists, bands, albums }) {
   const adminControlTableApi = useAdminControlTableApi('/music/songs');
+  
   return (
     <AdminLayout currentTab="songs">
       <AdminControlTable
@@ -48,6 +48,14 @@ function SongsPage({ genres, artists, bands }) {
             remoteData: bands,
             mappingField: 'name'
           }
+        }, {
+          title: 'Album',
+          field: 'album',
+          type: 'select',
+          selectOptions: {
+            remoteData: albums,
+            mappingField: 'name'
+          }
         }]}
       />
     </AdminLayout>
@@ -62,5 +70,8 @@ export default withAdminPage(
   }, {
     path: '/music/bands',
     field: 'bands'
+  }, {
+    path: '/music/albums',
+    field: 'albums'
   }])
 );

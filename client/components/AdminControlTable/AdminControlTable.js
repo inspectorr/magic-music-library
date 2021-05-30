@@ -6,6 +6,7 @@ import Select from 'react-select';
 
 export function useAdminControlTableApi(path) {
   const { data, mutate: reload } = useApi(path);
+  console.log({data})
   
   const {
     request: update

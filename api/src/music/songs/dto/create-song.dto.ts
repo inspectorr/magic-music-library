@@ -22,4 +22,7 @@ export class CreateSongDto extends BaseDto {
 
     @ApiProperty()
     band?: number;
+
+    @ApiProperty()
+    album?: number;
 }

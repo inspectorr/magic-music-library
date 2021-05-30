@@ -1,39 +1,38 @@
 import React, { Component } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-
-// fake data generator
-const getItems = count =>
-  Array.from({ length: count }, (v, k) => k).map(k => ({
-    id: `item-${k}`,
-    content: `item ${k}`
-  }));
+import { DragIndicator, RemoveCircle as Remove } from "@material-ui/icons";
 
 const grid = 8;
 
 const getItemStyle = (isDragging, draggableStyle) => ({
   // some basic styles to make the items look a bit nicer
   // userSelect: "none",
-  padding: grid * 2,
-  margin: `0 0 ${grid}px 0`,
+  // padding: grid * 2,
+  // margin: `0 0 ${grid}px 0`,
   
   // change background colour if dragging
-  background: isDragging ? "lightgreen" : "grey",
+  // background: isDragging ? "lightgreen" : "grey",
   
   // styles we need to apply on draggables
   ...draggableStyle
 });
 
 const getListStyle = isDraggingOver => ({
-  background: isDraggingOver ? "lightblue" : "lightgrey",
-  padding: grid,
-  width: 250
+  // background: isDraggingOver ? "lightorange" : "white",
+  // padding: grid,
+  // width: 250
 });
 
 export class AlbumPlaylist extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      items: props.items
+      items: props.items.map(props.map).map(
+        (item, i) => ({
+          original: props.items[i],
+          ...item,
+        })
+      ),
     };
     this.onDragEnd = this.onDragEnd.bind(this);
   }
@@ -59,7 +58,8 @@ export class AlbumPlaylist extends Component {
       result.destination.index
     );
     
-    console.log({items});
+    const { onReorder = (items) => {} } = this.props;
+    onReorder(items.map(item => item.original.id));
     
     this.setState({
       items
@@ -74,10 +74,14 @@ export class AlbumPlaylist extends Component {
         <Droppable droppableId="droppable">
           {(provided, snapshot) => (
             <div
+              className="admin-albums-playlist"
               {...provided.droppableProps}
               ref={provided.innerRef}
               style={getListStyle(snapshot.isDraggingOver)}
             >
+              {!this.state.items.length && (
+                <div style={{width: 250, padding: '0.5rem', boxSizing: 'border-box'}}><h3 style={{margin: 0}}>No songs yet.</h3><br/>Add songs to this album from the table on the right.</div>
+              )}
               {this.state.items.map((item, index) => (
                 <Draggable key={item.id} draggableId={item.id} index={index}>
                   {(provided, snapshot) => (
@@ -89,8 +93,20 @@ export class AlbumPlaylist extends Component {
                         snapshot.isDragging,
                         provided.draggableProps.style
                       )}
+                      className="admin-albums-playlist__item"
                     >
-                      {item.content}
+                      <div>
+                        <DragIndicator/>
+                        {' '}{index + 1}{'. '}{item.content}
+                      </div>
+                      <div
+                        className="admin-albums-playlist__remove-icon"
+                        onClick={() => {
+                          this.props.onRemoveClick(item.original.id, item.original.album.id);
+                        }}
+                      >
+                        <Remove/>
+                      </div>
                     </div>
                   )}
                 </Draggable>
