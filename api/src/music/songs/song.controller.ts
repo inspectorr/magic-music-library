@@ -16,11 +16,13 @@ import { SongService } from '@/music/songs/song.service';
 import { JwtAuthGuard } from '@/auth/jwt/jwt-auth.guard';
 import { CreateSongDto } from '@/music/songs/dto/create-song.dto';
 import { UpdateSongDto } from '@/music/songs/dto/update-song.dto';
+import { Roles } from '@/auth/roles/roles.decorator';
 
 @ApiBearerAuth()
 @ApiTags('Songs')
 @Controller('music/songs')
 @UseGuards(JwtAuthGuard)
+@Roles('admin')
 export class SongController extends CrudController {
     constructor(readonly service: SongService) {
         super(service);
