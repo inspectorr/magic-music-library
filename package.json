@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "license": "MIT",
   "scripts": {
+    "preinstall": "Why? Do not use intall here!",
     "build": "docker-compose build",
     "push:api": "docker push inspectorr/mml-api:latest",
     "push:client": "docker push inspectorr/mml-client:latest",
