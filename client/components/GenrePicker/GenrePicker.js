@@ -7,19 +7,22 @@ function GenrePicker({
   updateForSongId,
   updateForArtistId,
   defaultSelected = [],
-  onUpdate
+  onUpdate,
+  isSetter = true,
+  placeholder = 'Select...'
 }) {
   const {
     data: genres = [],
-    mutate: reloadGenres
   } = useApi('/music/genres');
   
   const {
     request: updateGenres
-  } = useRemote((selected= []) => {
+  } = useRemote(async(selected= []) => {
     const genres = selected.map(({ value: id }) => id);
-    
-    return request({
+  
+    if (!isSetter) return genres;
+  
+    await request({
       url: 'music/genres/set',
       method: 'PUT',
       data: {
@@ -27,24 +30,26 @@ function GenrePicker({
         updateForArtistId,
         genres
       }
-    })
+    });
+    
+    return genres;
   }, {
-    onSuccess: () => onUpdate && onUpdate()
+    onSuccess: (result) => onUpdate && onUpdate(result)
   });
+  
+  function map({ id, name }) {
+    return { value: id, label: name };
+  }
   
   return (
     <div className="genre-picker">
       <Select
-        defaultValue={defaultSelected.map(({ id, name }) => {
-          return { value: id, label: name };
-        })}
         isMulti
-        name="colors"
-        options={genres.map(({ id, name }) => {
-          return { value: id, label: name };
-        })}
-        className="basic-multi-select"
+        placeholder={placeholder}
         classNamePrefix="select"
+        className="basic-multi-select"
+        options={genres.map(map)}
+        defaultValue={defaultSelected.map(map)}
         onChange={updateGenres}
       />
     </div>

@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+import HomeGrid from '@/components/HomeGrid/HomeGrid';
 import BarButton from '@/components/Layout/BarButton';
 import Layout from '@/components/Layout/Layout';
 import withRouting from '@/support/hocs/withRouting';
@@ -27,7 +28,7 @@ function Home() {
         </Link>
       ].filter(Boolean)}
     >
-      <div>Home</div>
+      <HomeGrid />
     </Layout>
   );
 }

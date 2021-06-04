@@ -1,0 +1,44 @@
+.home-grid {
+  width: 100%;
+  height: 100%;
+
+  &__content {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  &__header {
+    font-weight: bold;
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+    margin-left: 0.5rem;
+  }
+
+  &__no-data {
+    margin-left: 0.5rem;
+  }
+
+  &--empty &__content {
+    display: none;
+  }
+}
+
+.data-block {
+  box-shadow: $material-box-shadow;
+  border-radius: 4px;
+  padding: 0.5rem;
+
+  & + & {
+    margin-top: 0.5rem;
+  }
+
+  &__header {
+    font-weight: bold;
+  }
+
+  &__entity {
+    font-size: 0.8rem;
+  }
+}

@@ -60,4 +60,47 @@ export class GenreService extends CrudService {
             await this.updateForEntityId(this.albumRepository, updateForAlbumId, 'albums', genres);
         }
     }
+
+    async getRandom(genres) {
+        return Object.entries((await Promise.all(genres.map((id) => (
+            this.repository.findOne({
+                where: { id },
+                relations: [
+                    'songs',
+                    'songs.genres',
+                    'songs.artist',
+                    'songs.band',
+                    'artists',
+                    'artists.genres',
+                    'bands',
+                    'bands.genres',
+                    'albums',
+                    'albums.genres',
+                ],
+            })
+        ))))
+        .reduce((acc: any, data: any) => ({
+            songs: flat(acc.songs, data.songs),
+            artists: flat(acc.artists, data.artists),
+            bands: flat(acc.bands, data.bands),
+            albums: flat(acc.albums, data.albums),
+        }), {}))
+        .reduce((acc, [key, value]) => ({
+            ...acc,
+            [key]: filter(value),
+        }), {});
+    }
+}
+
+function flat(...arrays) {
+    return arrays.reduce((a, b) => [...(a ?? []), ...(b ?? [])], []);
+}
+
+function filter(array) {
+    const map = array.reduce((acc, el, i) => ({
+        ...acc,
+        [el.id]: acc[el.id] ?? i
+    }), {});
+
+    return array.filter((el, i) => i === map[el.id]);
 }
