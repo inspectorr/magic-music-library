@@ -36,9 +36,11 @@
 
   &__header {
     font-weight: bold;
+    margin-bottom: 0.25rem;
   }
 
   &__entity {
     font-size: 0.8rem;
+    white-space: pre-line;
   }
 }

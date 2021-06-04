@@ -3,8 +3,10 @@ import React from 'react';
 function DataBlock({
   data = {},
   map = {},
-  handleMap = {},
   nameProp = 'name',
+  handleMap = {},
+  mapping = (row) => row?.name,
+  handleMapMulti = {},
 }) {
   return (
     <div className="data-block">
@@ -14,19 +16,27 @@ function DataBlock({
       <div className="data-block__data">
         {Object.entries(map).map(([key, title]) => {
           if (key === nameProp) return null;
-          
           const value = data[key];
+          
+          const func = handleMap?.[key] ?? mapping;
+          const funcMulti = handleMapMulti?.[key];
+          
           const handled = (
-            typeof value === 'string' || typeof value === 'number'
-              ? value
-              : (handleMap?.[key] ?? ((row) => row?.name))?.(value)
+            typeof value === 'string' || typeof value === 'number' ?
+              value :
+            value instanceof Array ?
+              funcMulti ?
+                funcMulti(value) :
+                value?.map(func).join(', ') :
+  
+              func(value)
           );
           
           if (!handled) return;
           
           return (
             <div key={key} className="data-block__entity">
-              <span>{title}</span>: {handled}
+              <b>{title}</b>: {handled}
             </div>
           );
         })}

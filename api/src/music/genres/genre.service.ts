@@ -70,12 +70,18 @@ export class GenreService extends CrudService {
                     'songs.genres',
                     'songs.artist',
                     'songs.band',
+                    'songs.album',
                     'artists',
                     'artists.genres',
+                    'artists.albums',
                     'bands',
                     'bands.genres',
+                    'bands.albums',
                     'albums',
                     'albums.genres',
+                    'albums.songs',
+                    'albums.artist',
+                    'albums.band',
                 ],
             })
         ))))

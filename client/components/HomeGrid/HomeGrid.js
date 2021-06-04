@@ -15,19 +15,24 @@ function HomeGrid() {
   
   const readMap = {
     songs: {
-      artist: 'Artist/band',
+      artist: 'Artist',
+      band: 'Band',
       album: 'Album',
       genres: 'Genres'
     },
     albums: {
-      artist: 'Artist/band',
-      genres: 'Genres'
+      artist: 'Artist',
+      band: 'Band',
+      genres: 'Genres',
+      songs: 'Songs'
     },
     artists: {
-      genres: 'Genres'
+      genres: 'Genres',
+      albums: 'Albums'
     },
     bands: {
-      genres: 'Genres'
+      genres: 'Genres',
+      albums: 'Albums'
     }
   }
   
@@ -49,14 +54,19 @@ function HomeGrid() {
                   key={cell.id}
                   data={cell}
                   map={readMap[column]}
-                  handleMap={{
-                    genres: (a) => a?.map(a => a.name).join(', ')
+                  handleMapMulti={{
+                    songs: (songs) => {
+                      songs.sort((a, b) => a.albumOrder - b.albumOrder);
+                      return songs.reduce((acc, song, i) => {
+                        return acc + '\n' + (i + 1) + '. ' + song.name;
+                      }, '');
+                    }
                   }}
                 />
               ))}
               {!data[column].length && (
                 <span className="home-grid__no-data">
-                  {`No ${column}`}
+                  {`🚫`}
                 </span>
               )}
             </div>
