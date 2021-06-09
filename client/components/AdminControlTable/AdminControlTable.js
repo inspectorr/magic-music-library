@@ -1,11 +1,13 @@
 import React, { useRef } from 'react';
 import MaterialTable from 'material-table';
-import useRemote from '@/support/hooks/useRemote';
-import request, { useApi } from '@/support/utils/request';
 import Select from 'react-select';
 
+import useApi from '@/support/hooks/useApi';
+import useRemote from '@/support/hooks/useRemote';
+import request from '@/support/utils/request';
+
 export function useAdminControlTableApi(path) {
-  const { data, mutate: reload } = useApi(path);
+  const { data, update: reload } = useApi(path);
   
   const {
     request: update

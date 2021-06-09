@@ -1,7 +1,9 @@
 import React from 'react';
 import Select from 'react-select';
+
+import request from '@/support/utils/request';
 import useRemote from '@/support/hooks/useRemote';
-import request, { useApi } from '@/support/utils/request';
+import useApi from '@/support/hooks/useApi';
 
 function GenrePicker({
   updateForSongId,

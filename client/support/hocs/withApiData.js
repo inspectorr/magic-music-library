@@ -1,11 +1,11 @@
+import useApi from '@/support/hooks/useApi';
 import React from 'react';
-import { useApi } from '@/support/utils/request';
 
 function withApiData(Component, datum = [{ path: '', field: '' }]) {
   function ComposeComponent(Component, datum = [], generalProps = {}) {
     const Composed = datum.reduce((Component, { path, field }) => {
       return (props) => {
-        const { data, mutate: reload } = useApi(path);
+        const { data, update } = useApi(path);
         
         return (
           <Component
@@ -13,7 +13,7 @@ function withApiData(Component, datum = [{ path: '', field: '' }]) {
             {...props}
             {...{
               [field]: data,
-              [`reload${field[0].toUpperCase() + field.slice(1)}`]: reload
+              [`reload${field[0].toUpperCase() + field.slice(1)}`]: update
             }}
           />
         );

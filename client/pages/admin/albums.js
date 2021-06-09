@@ -1,6 +1,7 @@
+import useApi from '@/support/hooks/useApi';
 import React from 'react';
 import AddBox from '@material-ui/icons/AddBox';
-import request, { useApi } from '@/support/utils/request';
+import request from '@/support/utils/request';
 import useRemote from '@/support/hooks/useRemote';
 import { withAdminPage } from '@/pages/admin/index';
 import withApiData from '@/support/hocs/withApiData';
@@ -72,7 +73,7 @@ function AlbumDetailPanel({ album }) {
   
   const {
     data: albumSongs = [],
-    mutate: reloadAlbumSongs = () => {}
+    update: reloadAlbumSongs = () => {}
   } = useApi(`/music/albums/${album.id}/songs`);
   
   const {

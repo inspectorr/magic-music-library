@@ -4,13 +4,14 @@ import capitalize from '@material-ui/core/utils/capitalize';
 
 import GenrePicker from '@/components/GenrePicker/GenrePicker';
 import DataBlock from '@/components/HomeGrid/DataBlock';
-import { useApi } from '@/support/utils/request';
+import useApi from '@/support/hooks/useApi';
 
 function HomeGrid() {
   const [selectedGenres, setSelectedGenres] = useState([]);
   
   const {
-    data = {}
+    data = {},
+    loading
   } = useApi(`/music/genres/use/random/${selectedGenres.join(',')}`)
   
   const readMap = {
@@ -43,7 +44,10 @@ function HomeGrid() {
         onUpdate={setSelectedGenres}
         placeholder="Pick up your genres!"
       />
-      <div className="home-grid__content">
+      <div className={cn(
+        "home-grid__content",
+        loading && "home-grid__content--loading"
+      )}>
         {['songs', 'albums', 'artists', 'bands']
           .filter(column => !!data?.[column])
           .map((column) => (

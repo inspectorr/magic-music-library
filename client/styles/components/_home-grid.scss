@@ -1,3 +1,11 @@
+.home {
+  .layout {
+    &__content {
+      overflow-y: scroll;
+    }
+  }
+}
+
 .home-grid {
   width: 100%;
   height: 100%;
@@ -7,6 +15,11 @@
     grid-template-columns: repeat(4, 1fr);
     grid-gap: 1rem;
     margin-top: 1rem;
+
+    transition: 200ms ease-in-out;
+    &--loading {
+      opacity: 0;
+    }
   }
 
   &__header {
