@@ -1,63 +1,94 @@
 import { useEffect, useRef, useState } from 'react';
 import useSWR from 'swr';
+
 import { clientFetch } from '@/support/utils/request';
 
-// TODO (DRAFT)
-export default function useApi(path, options) {
+const ENABLE_MIN_LOAD = false;
+const DEFAULT_MIN_LOAD_TIME = 250;
+
+// TODO debug, refactoring
+export default function useApi(
+  path,
+  options = {
+    enableMinLoad: ENABLE_MIN_LOAD,
+    minLoadTime: DEFAULT_MIN_LOAD_TIME,
+  }
+) {
+  const {
+    enableMinLoad = ENABLE_MIN_LOAD,
+    minLoadTime = DEFAULT_MIN_LOAD_TIME,
+  } = options;
+  
   const {
     data,
     mutate,
     error
-  } = useSWR(path, clientFetch, options);
+  } = useSWR(path, clientFetch);
   
   const [loading, setLoading] = useState(true);
   const [allowReturn, setAllowReturn] = useState(false);
   
-  let time = useRef(0);
+  const time = useRef(0);
+  const isForceUpdating = useRef(false);
   
   function update(...args) {
     setLoading(true);
-    setAllowReturn(false);
+    isForceUpdating.current = true;
     
-    clearTimeout(time.current);
-    time.current = setTimeout(() => {
-      setAllowReturn(true);
-    }, 1000);
+    if (enableMinLoad) {
+      setAllowReturn(false);
+      delayedCall(() => {
+        setAllowReturn(true);
+      });
+    }
     
     return mutate(...args);
   }
   
-  const [exposingData, setExposingData] = useState();
+  function delayedCall(func = () => {}) {
+    clearTimeout(time.current);
+    time.current = setTimeout(func, minLoadTime);
+  }
   
-  let last = useRef('init'); // TODO (DRAFT)
+  const [exposingData, setExposingData] = useState();
+  const random = useRef(Math.random());
+  const last = useRef(random.current);
+  
+  function shouldUpdateWith(data) {
+    return JSON.stringify(data) !== JSON.stringify(last.current);
+  }
+  
+  function isInInitialState() {
+    return last.current === random.current;
+  }
+  
   useEffect(() => {
-    if (last.current === 'init' || (JSON.stringify(data) !== JSON.stringify(last.current))) {
-      setLoading(true);
-      const shouldExpose = last.current !== 'init';
+    if (shouldUpdateWith(data)) {
+      if (!loading) {
+        setLoading(true);
+      }
       
+      const shouldExpose = !isInInitialState();
       last.current = data;
       
-      clearTimeout(time.current);
-      time.current = setTimeout(() => {
+      function finishLoading() {
         if (shouldExpose) {
           setExposingData(last.current);
         }
         setAllowReturn(true);
         setLoading(false);
-      }, 400);
+      }
+      
+      if (isForceUpdating.current) {
+        finishLoading();
+        return;
+      }
+      
+      delayedCall(finishLoading);
     }
-  
+    
+    isForceUpdating.current = false;
   }, [data]);
-  
-  // TODO (DRAFT)
-  console.log({
-    data,
-    exposingData,
-    error,
-    loading,
-    allowReturn,
-    last: last.current
-  });
   
   return {
     data: exposingData,
