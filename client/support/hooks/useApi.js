@@ -4,7 +4,7 @@ import useSWR from 'swr';
 import { clientFetch } from '@/support/utils/request';
 
 const ENABLE_MIN_LOAD = false;
-const DEFAULT_MIN_LOAD_TIME = 250;
+const DEFAULT_MIN_LOAD_TIME = 500;
 
 // TODO debug, refactoring
 export default function useApi(
@@ -79,7 +79,7 @@ export default function useApi(
         setLoading(false);
       }
       
-      if (isForceUpdating.current) {
+      if (isForceUpdating.current || !enableMinLoad) {
         finishLoading();
         return;
       }

@@ -6,35 +6,45 @@ import GenrePicker from '@/components/GenrePicker/GenrePicker';
 import DataBlock from '@/components/HomeGrid/DataBlock';
 import useApi from '@/support/hooks/useApi';
 
+const READ_MAP = {
+  songs: {
+    artist: 'Artist',
+    band: 'Band',
+    album: 'Album',
+    genres: 'Genres'
+  },
+  albums: {
+    artist: 'Artist',
+    band: 'Band',
+    genres: 'Genres',
+    songs: 'Songs'
+  },
+  artists: {
+    genres: 'Genres',
+    albums: 'Albums'
+  },
+  bands: {
+    genres: 'Genres',
+    albums: 'Albums'
+  }
+};
+
 function HomeGrid() {
   const [selectedGenres, setSelectedGenres] = useState([]);
   
   const {
     data = {},
     loading
-  } = useApi(`/music/genres/use/random/${selectedGenres.join(',')}`)
+  } = useApi(
+    `/music/genres/use/random/${selectedGenres.join(',')}`,
+    { enableMinLoad: true }
+  );
   
-  const readMap = {
-    songs: {
-      artist: 'Artist',
-      band: 'Band',
-      album: 'Album',
-      genres: 'Genres'
-    },
-    albums: {
-      artist: 'Artist',
-      band: 'Band',
-      genres: 'Genres',
-      songs: 'Songs'
-    },
-    artists: {
-      genres: 'Genres',
-      albums: 'Albums'
-    },
-    bands: {
-      genres: 'Genres',
-      albums: 'Albums'
-    }
+  function handleSongsProperty(songs = []) {
+    songs.sort((a, b) => a.albumOrder - b.albumOrder);
+    return songs.reduce((acc, song, i) => {
+      return acc + '\n' + (i + 1) + '. ' + song.name;
+    }, '');
   }
   
   return (
@@ -57,14 +67,9 @@ function HomeGrid() {
                 <DataBlock
                   key={cell.id}
                   data={cell}
-                  map={readMap[column]}
+                  map={READ_MAP[column]}
                   handleMapMulti={{
-                    songs: (songs) => {
-                      songs.sort((a, b) => a.albumOrder - b.albumOrder);
-                      return songs.reduce((acc, song, i) => {
-                        return acc + '\n' + (i + 1) + '. ' + song.name;
-                      }, '');
-                    }
+                    songs: handleSongsProperty
                   }}
                 />
               ))}
