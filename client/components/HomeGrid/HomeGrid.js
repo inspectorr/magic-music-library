@@ -69,7 +69,7 @@ function HomeGrid() {
   }
   
   return (
-    <div className={cn("home-grid", !selectedGenres.length && "home-grid--empty")}>
+    <div className="home-grid">
       <GenrePicker
         isSetter={false}
         onUpdate={setSelectedGenres}
@@ -78,7 +78,8 @@ function HomeGrid() {
       />
       <div className={cn(
         "home-grid__content",
-        loading && "home-grid__content--loading"
+        loading && "home-grid__content--loading",
+        !selectedGenres.length && "home-grid__content--empty"
       )}>
         {['songs', 'albums', 'artists', 'bands']
           .filter(column => !!data?.[column])
