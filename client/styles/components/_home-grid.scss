@@ -56,4 +56,8 @@
     font-size: 0.8rem;
     white-space: pre-line;
   }
+
+  &:last-child {
+    margin-bottom: 1rem;
+  }
 }
