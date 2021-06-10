@@ -3,7 +3,7 @@ import { withAdminPage } from '@/pages/admin/index';
 import AdminLayout from '@/components/Layout/AdminLayout';
 import AdminControlTable, { useAdminControlTableApi } from '@/components/AdminControlTable/AdminControlTable';
 
-function UsersPage() {
+function UsersPage({ genres }) {
   const adminControlTableApi = useAdminControlTableApi('/users');
   
   return (
@@ -27,6 +27,15 @@ function UsersPage() {
           title: 'Role',
           field: 'role',
           lookup: { 'user': 'User', 'admin': 'Admin' },
+        }, {
+          title: 'Preferred genres',
+          field: 'genres',
+          type: 'multiselect',
+          multiselectOptions: {
+            remoteData: genres,
+            mappingField: 'name'
+          },
+          editable: false
         }]}
       />
     </AdminLayout>

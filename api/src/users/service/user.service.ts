@@ -8,6 +8,7 @@ import { UpdateUserDto } from '@/users/dto/update-user.dto';
 @Injectable()
 export class UserService extends CrudService {
   @Inject('USER_REPOSITORY') repository: Repository<UserEntity>;
+  options = { relations: ['genres'] };
 
   async register(registerUserDto: RegisterUserDto, byUser: UserEntity, role = 'user') {
     const payload = {

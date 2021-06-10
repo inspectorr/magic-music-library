@@ -1,50 +1,66 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Select from 'react-select';
+
+import request from '@/support/utils/request';
 import useRemote from '@/support/hooks/useRemote';
-import request, { useApi } from '@/support/utils/request';
+import useApi from '@/support/hooks/useApi';
 
 function GenrePicker({
   updateForSongId,
   updateForArtistId,
   defaultSelected = [],
-  onUpdate
+  onUpdate,
+  isSetter = true,
+  placeholder = 'Select...'
 }) {
   const {
     data: genres = [],
-    mutate: reloadGenres
+    update
   } = useApi('/music/genres');
   
   const {
     request: updateGenres
-  } = useRemote((selected= []) => {
+  } = useRemote(async (selected= []) => {
     const genres = selected.map(({ value: id }) => id);
+  
+    if (isSetter) {
+      await request({
+        url: 'music/genres/set',
+        method: 'PUT',
+        data: {
+          updateForSongId,
+          updateForArtistId,
+          genres
+        }
+      });
+    }
     
-    return request({
-      url: 'music/genres/set',
-      method: 'PUT',
-      data: {
-        updateForSongId,
-        updateForArtistId,
-        genres
-      }
-    })
+    return selected.map(unmap);
   }, {
-    onSuccess: () => onUpdate && onUpdate()
+    onSuccess: (result) => onUpdate && onUpdate(result)
   });
+  
+  useEffect(() => {
+    update();
+  }, []);
+  
+  function map({ id, name }) {
+    return { value: id, label: name };
+  }
+  
+  function unmap({ value, label }) {
+    return { id: value, name: label, ...{} };
+  }
   
   return (
     <div className="genre-picker">
       <Select
-        defaultValue={defaultSelected.map(({ id, name }) => {
-          return { value: id, label: name };
-        })}
         isMulti
-        name="colors"
-        options={genres.map(({ id, name }) => {
-          return { value: id, label: name };
-        })}
-        className="basic-multi-select"
+        placeholder={placeholder}
         classNamePrefix="select"
+        className="basic-multi-select"
+        options={genres.map(map)}
+        defaultValue={defaultSelected.map(map)}
         onChange={updateGenres}
       />
     </div>

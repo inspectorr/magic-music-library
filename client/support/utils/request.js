@@ -37,8 +37,4 @@ export async function clientFetch(url, term) {
   return res.data;
 }
 
-export function useApi(path, options) {
-  return useSWR(path, clientFetch, options);
-}
-
 export default localAxios;

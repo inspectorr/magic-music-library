@@ -4,6 +4,7 @@ import { DatabaseModule } from '@/database/database.module';
 import { UserService } from './service/user.service';
 import { Connection } from 'typeorm';
 import { UserEntity } from '@/users/model/user.entity';
+import { MusicModule } from '@/music/music.module';
 
 export const userProviders = [
   {
@@ -15,7 +16,7 @@ export const userProviders = [
 ];
 
 @Module({
-  imports: [DatabaseModule],
+  imports: [DatabaseModule, MusicModule],
   controllers: [UserController],
   providers: [...userProviders, UserService],
   exports: [UserService],

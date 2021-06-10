@@ -1,6 +1,7 @@
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, ManyToMany } from 'typeorm';
 import { BaseEntity } from '@/support/model/base.entity';
 import * as bcrypt from 'bcrypt';
+import { GenreEntity } from '@/music/genres/genre.entity';
 
 @Entity('users')
 export class UserEntity extends BaseEntity {
@@ -15,6 +16,9 @@ export class UserEntity extends BaseEntity {
 
   @Column()
   password: string;
+
+  @ManyToMany(() => GenreEntity, genre => genre.users)
+  genres: GenreEntity[];
 
   static SALT_ROUNDS = 10;
 
