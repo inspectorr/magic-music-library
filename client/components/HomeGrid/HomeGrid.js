@@ -1,12 +1,15 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import cn from 'classnames';
 import capitalize from '@material-ui/core/utils/capitalize';
 
+import request from '@/support/utils/request';
+import useApi from '@/support/hooks/useApi';
+import useRemote from '@/support/hooks/useRemote';
+import { useUser } from '@/support/data/user';
 import GenrePicker from '@/components/GenrePicker/GenrePicker';
 import DataBlock from '@/components/HomeGrid/DataBlock';
-import useApi from '@/support/hooks/useApi';
 
-const READ_MAP = {
+const DATA_BLOCKS_PROPERTY_MAP = {
   songs: {
     artist: 'Artist',
     band: 'Band',
@@ -30,15 +33,33 @@ const READ_MAP = {
 };
 
 function HomeGrid() {
-  const [selectedGenres, setSelectedGenres] = useState([]);
+  const { user } = useUser();
+  const [selectedGenres, setSelectedGenres] = useState(user.genres);
+  
+  function getGenresString() {
+    return selectedGenres.map(g => g.id).join(',');
+  }
   
   const {
     data = {},
     loading
   } = useApi(
-    `/music/genres/use/random/${selectedGenres.join(',')}`,
+    `/music/genres/use/random/${getGenresString()}`,
     { enableMinLoad: true }
   );
+  
+  const {
+    request: saveGenres
+  } = useRemote(() => {
+    return request({
+      url: `/music/genres/use/save/${getGenresString()}`,
+      method: 'PUT',
+    });
+  });
+  
+  useEffect(() => {
+    saveGenres();
+  }, [selectedGenres]);
   
   function handleSongsProperty(songs = []) {
     songs.sort((a, b) => a.albumOrder - b.albumOrder);
@@ -53,6 +74,7 @@ function HomeGrid() {
         isSetter={false}
         onUpdate={setSelectedGenres}
         placeholder="Pick up your genres!"
+        defaultSelected={selectedGenres}
       />
       <div className={cn(
         "home-grid__content",
@@ -67,7 +89,7 @@ function HomeGrid() {
                 <DataBlock
                   key={cell.id}
                   data={cell}
-                  map={READ_MAP[column]}
+                  map={DATA_BLOCKS_PROPERTY_MAP[column]}
                   handleMapMulti={{
                     songs: handleSongsProperty
                   }}

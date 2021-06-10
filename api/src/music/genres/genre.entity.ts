@@ -11,7 +11,7 @@ export class GenreEntity extends BaseEntity {
     @Column({ unique: true })
     name: string;
 
-    @ManyToMany(() => UserEntity)
+    @ManyToMany(() => UserEntity, user => user.genres)
     @JoinTable()
     users: UserEntity[];
 

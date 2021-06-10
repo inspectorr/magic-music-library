@@ -9,6 +9,7 @@ import { GenreService } from '@/music/genres/genre.service';
 import { ArtistService } from '@/music/artists/artist.service';
 import { BandService } from '@/music/bands/band.service';
 import { AlbumService } from '@/music/albums/album.service';
+import { UserEntity } from '@/users/model/user.entity';
 
 export const musicEntities = [
     SongEntity,
@@ -55,6 +56,12 @@ export const musicProviders = [
         provide: 'ALBUM_REPOSITORY',
         useFactory: (connection: Connection) =>
             connection.getRepository(AlbumEntity),
+        inject: ['DATABASE_CONNECTION'],
+    },
+    {
+        provide: 'USER_REPOSITORY',
+        useFactory: (connection: Connection) =>
+            connection.getRepository(UserEntity),
         inject: ['DATABASE_CONNECTION'],
     },
 ];

@@ -8,6 +8,7 @@ import {
     Param,
     Put,
     UseGuards,
+    Request
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Roles } from '@/auth/roles/roles.decorator';
@@ -43,5 +44,13 @@ export class GenreController extends CrudController {
     getRandom(@Param('genres') genres: string) {
         const split = genres.split(',');
         return this.service.getRandom(split);
+    }
+
+    @Put('/use/save/:genres')
+    @ApiOperation({ summary: 'Update user predefined genres.' })
+    @Roles('admin', 'user')
+    saveUser(@Param('genres') genres: string, @Request() req) {
+        const split = genres.split(',');
+        return this.service.saveUser(split, req.user);
     }
 }

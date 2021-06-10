@@ -6,7 +6,6 @@ import { clientFetch } from '@/support/utils/request';
 const ENABLE_MIN_LOAD = false;
 const DEFAULT_MIN_LOAD_TIME = 500;
 
-// TODO debug, refactoring
 export default function useApi(
   path,
   options = {
@@ -51,15 +50,9 @@ export default function useApi(
   }
   
   const [exposingData, setExposingData] = useState();
-  const random = useRef(Math.random());
-  const last = useRef(random.current);
   
   function shouldUpdateWith(data) {
-    return JSON.stringify(data) !== JSON.stringify(last.current);
-  }
-  
-  function isInInitialState() {
-    return last.current === random.current;
+    return JSON.stringify(data) !== JSON.stringify(exposingData);
   }
   
   useEffect(() => {
@@ -68,13 +61,8 @@ export default function useApi(
         setLoading(true);
       }
       
-      const shouldExpose = !isInInitialState();
-      last.current = data;
-      
       function finishLoading() {
-        if (shouldExpose) {
-          setExposingData(last.current);
-        }
+        setExposingData(data);
         setAllowReturn(true);
         setLoading(false);
       }

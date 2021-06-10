@@ -7,6 +7,7 @@ import { SongEntity } from '@/music/songs/song.entity';
 import { ArtistEntity } from '@/music/artists/artist.entity';
 import { BandEntity } from '@/music/bands/band.entity';
 import { AlbumEntity } from '@/music/albums/album.entity';
+import { UserEntity } from '@/users/model/user.entity';
 
 @Injectable()
 export class GenreService extends CrudService {
@@ -15,6 +16,7 @@ export class GenreService extends CrudService {
     @Inject('ARTIST_REPOSITORY') readonly artistRepository: Repository<ArtistEntity>;
     @Inject('BAND_REPOSITORY') readonly bandRepository: Repository<BandEntity>;
     @Inject('ALBUM_REPOSITORY') readonly albumRepository: Repository<AlbumEntity>;
+    @Inject('USER_REPOSITORY') readonly userRepository: Repository<UserEntity>;
 
     getOneByName(name) {
         return this.repository.findOne({ where: { name } });
@@ -34,9 +36,9 @@ export class GenreService extends CrudService {
     }
 
     async updateForEntityId(repository: Repository<any>, entityId: number, name: string, genres: any[]) {
-        const song = await repository.findOne(entityId);
-        song.genres = [];
-        await repository.save(song);
+        const entity = await repository.findOne(entityId);
+        entity.genres = [];
+        await repository.save(entity);
         await this.append(name, genres, entityId);
     }
 
@@ -45,7 +47,8 @@ export class GenreService extends CrudService {
         updateForSongId,
         updateForArtistId,
         updateForBandId,
-        updateForAlbumId
+        updateForAlbumId,
+        updateForUserId
     }: UpdateGenreDto) {
         if (updateForSongId) {
             await this.updateForEntityId(this.songRepository, updateForSongId, 'songs', genres);
@@ -59,6 +62,13 @@ export class GenreService extends CrudService {
         if (updateForAlbumId) {
             await this.updateForEntityId(this.albumRepository, updateForAlbumId, 'albums', genres);
         }
+        if (updateForUserId) {
+            await this.updateForEntityId(this.userRepository, updateForUserId, 'users', genres);
+        }
+    }
+
+    async saveUser(genres, user) {
+        return this.update({ genres, updateForUserId: user.id });
     }
 
     async getRandom(genres) {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Select from 'react-select';
 
 import request from '@/support/utils/request';
@@ -15,32 +15,41 @@ function GenrePicker({
 }) {
   const {
     data: genres = [],
+    update
   } = useApi('/music/genres');
   
   const {
     request: updateGenres
-  } = useRemote(async(selected= []) => {
+  } = useRemote(async (selected= []) => {
     const genres = selected.map(({ value: id }) => id);
   
-    if (!isSetter) return genres;
-  
-    await request({
-      url: 'music/genres/set',
-      method: 'PUT',
-      data: {
-        updateForSongId,
-        updateForArtistId,
-        genres
-      }
-    });
+    if (isSetter) {
+      await request({
+        url: 'music/genres/set',
+        method: 'PUT',
+        data: {
+          updateForSongId,
+          updateForArtistId,
+          genres
+        }
+      });
+    }
     
-    return genres;
+    return selected.map(unmap);
   }, {
     onSuccess: (result) => onUpdate && onUpdate(result)
   });
   
+  useEffect(() => {
+    update();
+  }, []);
+  
   function map({ id, name }) {
     return { value: id, label: name };
+  }
+  
+  function unmap({ value, label }) {
+    return { id: value, name: label, ...{} };
   }
   
   return (
